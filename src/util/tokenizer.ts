@@ -1,26 +1,19 @@
-import { LabelMap, Instructions, StringPushOperation, NumberPushOperation, instructiontype, PushNumberInstruction, PushStringInstruction, InvokeFunctionInstruction } from "./vm";
 import u from "unist-builder";
-import { Node } from "unist";
+import { Instruction } from "../interfaces";
+import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../";
 
 const stringPushOperationRegexp = /^\"(.+)\"$/;
 const numberPushOperationRegexp = /^([0-9]+)$/;
 const functionInvocationOperationRegexp = /^(\S+)$/;
 const labelInstructionRegexp = /^\#(\S+)$/;
 
-export type InstructionNode<T extends instructiontype> = Node & {
-  type: T
-};
-export type PushInstructionNode<T extends instructiontype, V> = Node & { value: V } & {
-  type: T
-};
-
-export const pushNumber: (val: number) => PushInstructionNode<PushNumberInstruction["type"], number> = val => {
+export const pushNumber: (val: number) => PushNumberInstruction = val => {
   return u("push-number-instruction", { value: val });
 };
-export const pushString: (val: string) => PushInstructionNode<PushStringInstruction["type"], string> = val => {
+export const pushString: (val: string) => PushStringInstruction = val => {
   return u("push-string-instruction", { value: val });
 };
-export const invokeFunction: (name: string) => InstructionNode<InvokeFunctionInstruction["type"]> & { functionName: string } = name => {
+export const invokeFunction: (name: string) => InvokeFunctionInstruction = name => {
   return u("invoke-function-instruction", { functionName: name });
 };
 
@@ -86,7 +79,7 @@ export class Tokenizer {
      */
     const labelMap: LabelMap = {};
     let i = 0;
-    const instructions: InstructionNode<instructiontype>[] = tokens.map(token => {
+    const instructions: Instruction[] = tokens.map(token => {
       const matchLabelInstruction = token.match(labelInstructionRegexp);
       if (matchLabelInstruction !== null) {
         const label = matchLabelInstruction[1];
