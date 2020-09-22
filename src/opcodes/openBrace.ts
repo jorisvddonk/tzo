@@ -1,7 +1,6 @@
 import { Stack, Context, getStackParams, VM } from "..";
 
-export default function openBrace(stack: Stack, context: Context, vm: VM) { // jump to matching brace (source): push current programCounter plus one to stack, then jump to matching brace
-  vm.stack.push(vm.programCounter + 1);
+export default function openBrace(stack: Stack, context: Context, vm: VM) { // jump to matching brace (source)
   let i = 0;
   let pc = vm.programCounter + 1;
   while (true) {
