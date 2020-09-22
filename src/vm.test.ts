@@ -96,6 +96,16 @@ test('should calculate less than', () => {
   expect(createVMAndRunCode(`1 0 lt`).stack).toEqual([1]); // less than
 });
 
+test('should concat', () => {
+  expect(createVMAndRunCode(`"one" "two" concat`).stack).toEqual(["twoone"]);
+  expect(createVMAndRunCode(`"1" "two" concat`).stack).toEqual(["two1"]);
+});
+
+test('should rconcat (reverse concat)', () => {
+  expect(createVMAndRunCode(`"one" "two" rconcat`).stack).toEqual(["onetwo"]);
+  expect(createVMAndRunCode(`"1" "two" rconcat`).stack).toEqual(["1two"]);
+});
+
 test('should pause', () => {
   const vm = createVMAndRunCode(`"foo" "bar" pause "baz" "quux"`);
   expect(vm.stack).toEqual(["foo", "bar"]);
