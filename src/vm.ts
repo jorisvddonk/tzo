@@ -1,7 +1,23 @@
 import debug from "debug";
 import { Context, FunctionInvocationOperation, Functions, Instruction, InstructionOperation, Instructions, instructiontype, InvokeFunctionInstruction, LabelMap, NumberPushOperation, PushNumberInstruction, PushStringInstruction, Stack, StringPushOperation, TzoVMState } from "./interfaces";
-
-const logger = debug("tzo-vm");
+import charCode from "./opcodes/charCode";
+import closeBrace from "./opcodes/closeBrace";
+import concat from "./opcodes/concat";
+import eq from "./opcodes/eq";
+import exit from "./opcodes/exit";
+import getContext from "./opcodes/getContext";
+import goto from "./opcodes/goto";
+import gt from "./opcodes/gt";
+import jgz from "./opcodes/jgz";
+import lt from "./opcodes/lt";
+import min from "./opcodes/min";
+import mul from "./opcodes/mul";
+import openBrace from "./opcodes/openBrace";
+import pause from "./opcodes/pause";
+import plus from "./opcodes/plus";
+import randInt from "./opcodes/randInt";
+import rconcat from "./opcodes/rconcat";
+import setContext from "./opcodes/setContext";
 
 export const getStackParams = (functionName: string, paramTypes: Array<"string" | "number" | "string | number">, stack: Stack) => {
   /**
@@ -23,87 +39,27 @@ export const getStackParams = (functionName: string, paramTypes: Array<"string" 
 }
 
 export const std_functions: Functions = {
-  "randInt": (stack: Stack) => {
-    const [max] = getStackParams("randInt", ["number"], stack) as [number];
-    const retval = Math.floor(Math.random() * max);
-    stack.push(retval);
-    return retval;
-  },
-  "charCode": (stack: Stack) => {
-    const [num] = getStackParams("charCode", ["number"], stack) as [number];
-    const retval = String.fromCharCode(num);
-    stack.push(retval);
-    return retval;
-  },
-  "+": (stack: Stack) => {
-    const [num1, num2] = getStackParams("+", ["number", "number"], stack) as [number, number];
-    const retval = num1 + num2;
-    stack.push(retval);
-    return retval;
-  },
-  "-": (stack: Stack) => {
-    const [num1, num2] = getStackParams("-", ["number", "number"], stack) as [number, number];
-    const retval = num1 - num2;
-    stack.push(retval);
-    return retval;
-  },
-  "*": (stack: Stack) => {
-    const [num1, num2] = getStackParams("*", ["number", "number"], stack) as [number, number];
-    const retval = num1 * num2;
-    stack.push(retval);
-    return retval;
-  },
-  "concat": (stack: Stack) => {
-    const [str1, str2] = getStackParams("concat", ["string", "string"], stack) as [string, string];
-    const retval = `${str1}${str2}`;
-    stack.push(retval);
-    return retval;
-  },
-  "rconcat": (stack: Stack) => {
-    const [str1, str2] = getStackParams("rconcat", ["string", "string"], stack) as [string, string];
-    const retval = `${str2}${str1}`;
-    stack.push(retval);
-    return retval;
-  },
-  "getContext": (stack: Stack, context: Context) => {
-    const [str1] = getStackParams("getContext", ["string"], stack) as [string];
-    const retval = context[str1];
-    if (retval === null || retval === undefined) {
-      throw new Error(`getContext: null/undefined can not be pushed to the context! StackParam: ${str1}`);
-    }
-    stack.push(retval);
-    return retval;
-  },
-  "setContext": (stack: Stack, context: Context) => {
-    const [str1, arg2] = getStackParams("setContext", ["string", "string | number"], stack) as [string, string | number];
-    context[str1] = arg2;
-    return null;
-  },
-  "gt": (stack: Stack, context: Context) => {
-    const [num1, num2] = getStackParams("gt", ["number", "number"], stack) as [number, number];
-    const retval = num1 > num2 ? 1 : 0;
-    stack.push(retval);
-    return retval;
-  },
-  "lt": (stack: Stack, context: Context) => {
-    const [num1, num2] = getStackParams("lt", ["number", "number"], stack) as [number, number];
-    const retval = num1 < num2 ? 1 : 0;
-    stack.push(retval);
-    return retval;
-  },
-  "eq": (stack: Stack, context: Context) => {
-    const [val1, val2] = getStackParams("eq", ["string | number", "string | number"], stack) as [string | number, string | number];
-    const retval = val1 === val2 ? 1 : 0;
-    stack.push(retval);
-    return retval;
-  },
-  "jgz": (stack: Stack, context: Context, vm: VM) => { // jump (skip next instruction) if stack.pop() is greater than zero
-    const [num1] = getStackParams("jgz", ["number"], stack) as [number];
-    if (num1 > 0) {
-      vm.programCounter += 2; // it would normally already jump one, but since we modify it won't and we have to jump over ourselves
-    }
-    return null;
-  },
+  "randInt": randInt,
+  "charCode": charCode,
+  "+": plus,
+  "plus": plus,
+  "-": min,
+  "min": min,
+  "*": mul,
+  "mul": mul,
+  "concat": concat,
+  "rconcat": rconcat,
+  "getContext": getContext,
+  "setContext": setContext,
+  "gt": gt,
+  "lt": lt,
+  "eq": eq,
+  "jgz": jgz,
+  "exit": exit,
+  "pause": pause,
+  "goto": goto,
+  "{": openBrace,
+  "}": closeBrace,
 }
 
 export class VM {
@@ -117,60 +73,31 @@ export class VM {
   exit: boolean = false;
   pause: boolean = false;
 
+  logger = debug("tzo-vm");
+
   constructor(initialContext: Context, additionalFunctions: Functions = {}) {
     this.context = initialContext;
-    const openBraceFunction = (stack: Stack, context: Context, vm: VM) => { // jump to matching brace (source): push current programCounter plus one to stack, then jump to matching brace
-      vm.stack.push(vm.programCounter + 1);
-      let i = 0;
-      let pc = vm.programCounter + 1;
-      while (true) {
-        if (vm.programList[pc] === openBraceFunction) {
-          i += 1;
-        }
-        if (vm.programList[pc] === closeBraceFunction) {
-          i -= 1;
-          if (i === -1) {
-            vm.programCounter = pc + 1;
-            break;
-          }
-        }
-        pc += 1;
-      }
-      return null;
-    };
-    const closeBraceFunction = (stack: Stack) => { // jump to matching brace (target))
-      return null; // do nothing. We support "executing" these so that we can have if/else statements
-    }
     this.functions = {
-      ...std_functions, ...additionalFunctions, ...{
-        "goto": (stack: Stack) => {
-          const [str1] = getStackParams("goto", ["string"], stack) as [string];
-          const newPC = this.labelMap[str1];
-          if (newPC === undefined) {
-            throw new Error(`goto: attempting to jump to undefined label ${str1}`);
-          }
-          logger(`goto: setting pC to ${newPC} `);
-          this.programCounter = newPC;
-          return null;
-        },
-        "exit": (stack: Stack) => {
-          this.exit = true;
-          return null;
-        },
-        "{": openBraceFunction,
-        "}": closeBraceFunction
-      }
+      ...std_functions, ...additionalFunctions
     };
   }
 
+  quit() { // quit, so as to not name clash
+    this.exit = true;
+  }
+
+  suspend() { // suspend, so as to not name clash
+    this.pause = true;
+  }
+
   invoke(instructions: Instructions) {
-    logger("invoking!");
+    this.logger("invoking!");
     let retval: ReturnType<InstructionOperation> = undefined;
     instructions.forEach(instruction => {
-      logger(`stack (json): ${JSON.stringify(this.stack)}`);
+      this.logger(`stack (json): ${JSON.stringify(this.stack)}`);
       retval = instruction(this.stack, this.context, this);
     });
-    logger(`done! return value: ${retval}, final stack: ${JSON.stringify(this.stack)}, final context: ${JSON.stringify(this.context)}`);
+    this.logger(`done! return value: ${retval}, final stack: ${JSON.stringify(this.stack)}, final context: ${JSON.stringify(this.context)}`);
     return retval;
   }
 
@@ -183,7 +110,7 @@ export class VM {
           if (functionToPush === undefined) {
             if (functionNameToPush.startsWith("_")) { // do not throw errors when function name starts with underscore
               const x: FunctionInvocationOperation = () => {
-                logger(`Missing function got invoked: ${functionNameToPush}!`);
+                this.logger(`Missing function got invoked: ${functionNameToPush}!`);
                 return null;
               }
               functionToPush = x;
@@ -196,7 +123,7 @@ export class VM {
         case "push-number-instruction":
           return ((stack) => {
             const v = (instruction as PushNumberInstruction).value;
-            logger(`pushNumber: ${v}`);
+            this.logger(`pushNumber: ${v}`);
             stack.push(v);
             return instruction.value;
           }) as NumberPushOperation;
@@ -204,7 +131,7 @@ export class VM {
         case "push-string-instruction":
           return ((stack) => {
             const v = (instruction as PushStringInstruction).value;
-            logger(`pushString: ${v}`);
+            this.logger(`pushString: ${v}`);
             stack.push(v);
             return instruction.value;
           }) as StringPushOperation;
