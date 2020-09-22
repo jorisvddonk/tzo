@@ -59,3 +59,8 @@ test('should multiply numbers', () => {
   expect(createVMAndRunCode(`2 3 *`).stack).toEqual([6]);
   expect(createVMAndRunCode(`2 3 mul`).stack).toEqual([6]);
 });
+
+test('should support jgz, { and } for jgz-style if statements', () => {
+  expect(createVMAndRunCode(`1 jgz { "EXPECT_THIS" } "AND_THIS"`).stack).toEqual(["EXPECT_THIS", "AND_THIS"]);
+  expect(createVMAndRunCode(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`).stack).toEqual(["EXPECT_ONLY_THIS"]);
+});
