@@ -95,3 +95,28 @@ test('should calculate less than', () => {
   expect(createVMAndRunCode(`1 2 lt`).stack).toEqual([0]); // not less than
   expect(createVMAndRunCode(`1 0 lt`).stack).toEqual([1]); // less than
 });
+
+test('should pause', () => {
+  const vm = createVMAndRunCode(`"foo" "bar" pause "baz" "quux"`);
+  expect(vm.stack).toEqual(["foo", "bar"]);
+  expect(vm.pause).toEqual(true);
+  expect(vm.exit).toEqual(false);
+  expect(vm.programCounter).toEqual(3); // pause WILL increment the programCounter!
+  vm.run();
+  expect(vm.stack).toEqual(["foo", "bar", "baz", "quux"]);
+  expect(vm.pause).toEqual(false);
+  expect(vm.exit).toEqual(true);
+  expect(vm.programCounter).toEqual(5);
+});
+
+test('should exit', () => {
+  const vm = createVMAndRunCode(`"foo" "bar" exit "baz" "quux"`);
+  expect(vm.stack).toEqual(["foo", "bar"]);
+  expect(vm.pause).toEqual(false);
+  expect(vm.exit).toEqual(true);
+  expect(vm.programCounter).toEqual(3); // exit WILL increment the programCounter!
+  vm.run();
+  expect(vm.stack).toEqual(["foo", "bar"]);
+  expect(vm.pause).toEqual(false);
+  expect(vm.exit).toEqual(true);
+});
