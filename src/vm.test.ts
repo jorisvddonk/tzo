@@ -115,8 +115,9 @@ test('should exit', () => {
   expect(vm.pause).toEqual(false);
   expect(vm.exit).toEqual(true);
   expect(vm.programCounter).toEqual(3); // exit WILL increment the programCounter!
-  vm.run();
+  vm.run(); // this is a no-op, effectively, as the VM can not run anymore!
   expect(vm.stack).toEqual(["foo", "bar"]);
   expect(vm.pause).toEqual(false);
   expect(vm.exit).toEqual(true);
+  expect(vm.programCounter).toEqual(3);
 });
