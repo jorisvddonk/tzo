@@ -73,3 +73,25 @@ test('should support the goto instruction', () => {
   expect(createVMAndRunCode(`5 goto "foo" "bar" "baz" "quux" exit`).stack).toEqual(["quux"]);
   expect(createVMAndRunCode(`"myLabel" goto "foo" "bar" "baz" "quux" exit`, {}, { myLabel: 5 }).stack).toEqual(["quux"]);
 });
+
+test('should calculate equality between values on the stack', () => {
+  expect(createVMAndRunCode(`1 1 eq`).stack).toEqual([1]); // equal
+  expect(createVMAndRunCode(`0 0 eq`).stack).toEqual([1]); // equal
+  expect(createVMAndRunCode(`"foo" "foo" eq`).stack).toEqual([1]); // equal
+  expect(createVMAndRunCode(`"foo" "bar" eq`).stack).toEqual([0]); // not equal
+  expect(createVMAndRunCode(`1 2 eq`).stack).toEqual([0]); // not equal
+  expect(createVMAndRunCode(`2 1 eq`).stack).toEqual([0]); // not equal
+  expect(createVMAndRunCode(`"0" 0 eq`).stack).toEqual([0]); // not equal
+});
+
+test('should calculate greater than', () => {
+  expect(createVMAndRunCode(`1 1 gt`).stack).toEqual([0]); // not greater than
+  expect(createVMAndRunCode(`1 0 gt`).stack).toEqual([0]); // not greater than
+  expect(createVMAndRunCode(`1 2 gt`).stack).toEqual([1]); // greater than
+});
+
+test('should calculate less than', () => {
+  expect(createVMAndRunCode(`1 1 lt`).stack).toEqual([0]); // not less than
+  expect(createVMAndRunCode(`1 2 lt`).stack).toEqual([0]); // not less than
+  expect(createVMAndRunCode(`1 0 lt`).stack).toEqual([1]); // less than
+});
