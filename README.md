@@ -1,4 +1,4 @@
-# Tzo - a simple Virtual Stack Machine
+# Tzo 💎 - a simple Virtual Stack Machine
 
 Tzo is a simple Virtual Stack Machine. Its primary use case is to be implemented and embedded in games for a potentially wide variety of use cases. It is the default runtime engine for [QuestMark](https://github.com/jorisvddonk/questmark).
 
