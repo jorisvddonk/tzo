@@ -1,10 +1,14 @@
 import { Context, Tokenizer, VM } from ".";
+import { LabelMap } from "./interfaces";
 
-function createVMAndRunCode(codeBlock: string, initialContext?: Context) {
+function createVMAndRunCode(codeBlock: string, initialContext?: Context, initialLabelMap?: LabelMap) {
+  if (initialLabelMap === undefined) {
+    initialLabelMap = {};
+  }
   const vm = new VM(initialContext !== undefined ? initialContext : {});
   const tokenizer = new Tokenizer();
   const { instructions, labelMap } = tokenizer.transform(tokenizer.tokenize(codeBlock));
-  vm.loadProgramList(instructions);
+  vm.loadProgramList(instructions, { ...initialLabelMap, ...labelMap });
   vm.run();
   return vm;
 }
@@ -63,4 +67,9 @@ test('should multiply numbers', () => {
 test('should support jgz, { and } for jgz-style if statements', () => {
   expect(createVMAndRunCode(`1 jgz { "EXPECT_THIS" } "AND_THIS"`).stack).toEqual(["EXPECT_THIS", "AND_THIS"]);
   expect(createVMAndRunCode(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`).stack).toEqual(["EXPECT_ONLY_THIS"]);
+});
+
+test('should support the goto instruction', () => {
+  expect(createVMAndRunCode(`5 goto "foo" "bar" "baz" "quux" exit`).stack).toEqual(["quux"]);
+  expect(createVMAndRunCode(`"myLabel" goto "foo" "bar" "baz" "quux" exit`, {}, { myLabel: 5 }).stack).toEqual(["quux"]);
 });

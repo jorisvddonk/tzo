@@ -143,8 +143,11 @@ export class VM {
     return vmInstructions;
   }
 
-  loadProgramList(instructions: Instruction[]) {
+  loadProgramList(instructions: Instruction[], labelMap?: LabelMap) {
     this.programList = this.getVMInstructions(instructions);
+    if (labelMap !== undefined) {
+      this.labelMap = labelMap;
+    }
   }
 
   loadVMState(tzoVMState: TzoVMState) {
