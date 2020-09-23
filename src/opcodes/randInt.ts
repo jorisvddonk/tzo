@@ -1,8 +1,9 @@
-import { Stack, Context, getStackParams } from "..";
+import { Stack, Context, getStackParams, FunctionInvocationOperation } from "..";
 
-export default function randInt(stack: Stack) {
+const randInt: FunctionInvocationOperation = (stack: Stack) => {
   const [max] = getStackParams("randInt", ["number"], stack) as [number];
   const retval = Math.floor(Math.random() * max);
   stack.push(retval);
   return retval;
 }
+export default randInt;

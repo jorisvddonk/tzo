@@ -1,6 +1,6 @@
-import { Stack, Context, getStackParams, VM } from "..";
+import { Stack, Context, getStackParams, VM, FunctionInvocationOperation } from "..";
 
-export default function openBrace(stack: Stack, context: Context, vm: VM) { // jump to matching brace (source)
+const openBrace: FunctionInvocationOperation = (stack: Stack, context: Context, vm: VM) => { // jump to matching brace (source)
   let i = 0;
   let pc = vm.programCounter + 1;
   while (true) {
@@ -18,3 +18,4 @@ export default function openBrace(stack: Stack, context: Context, vm: VM) { // j
   }
   return null;
 }
+export default openBrace;

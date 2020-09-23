@@ -1,8 +1,9 @@
-import { Stack, Context, getStackParams } from "..";
+import { Stack, Context, getStackParams, FunctionInvocationOperation } from "..";
 
-export default function charCode(stack: Stack) {
+const charCode: FunctionInvocationOperation = (stack: Stack) => {
   const [num] = getStackParams("charCode", ["number"], stack) as [number];
   const retval = String.fromCharCode(num);
   stack.push(retval);
   return retval;
 }
+export default charCode;

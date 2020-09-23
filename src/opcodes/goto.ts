@@ -1,6 +1,6 @@
-import { Stack, Context, getStackParams, VM } from "..";
+import { Stack, Context, getStackParams, VM, FunctionInvocationOperation } from "..";
 
-export default function goto(stack: Stack, context: Context, vm: VM) {
+const goto: FunctionInvocationOperation = (stack: Stack, context: Context, vm: VM) => {
   const [val1] = getStackParams("goto", ["string | number"], stack) as [string | number];
   if (typeof val1 === "string") {
     const newPC = vm.labelMap[val1];
@@ -15,3 +15,4 @@ export default function goto(stack: Stack, context: Context, vm: VM) {
     vm.programCounter = val1;
   }
 }
+export default goto;

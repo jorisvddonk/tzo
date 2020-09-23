@@ -1,5 +1,6 @@
-import { Stack, Context, getStackParams, VM } from "..";
+import { Stack, Context, getStackParams, VM, FunctionInvocationOperation } from "..";
 
-export default function closeBrace(stack: Stack) { // jump to matching brace (target))
+const closeBrace: FunctionInvocationOperation = (stack: Stack) => { // jump to matching brace (target))
   return null; // do nothing. We support "executing" these so that we can have if/else statements
 }
+export default closeBrace;

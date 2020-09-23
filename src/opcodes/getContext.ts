@@ -1,6 +1,6 @@
-import { Stack, Context, getStackParams } from "..";
+import { Stack, Context, getStackParams, FunctionInvocationOperation } from "..";
 
-export default function getContext(stack: Stack, context: Context) {
+const getContext: FunctionInvocationOperation = (stack: Stack, context: Context) => {
   const [str1] = getStackParams("getContext", ["string"], stack) as [string];
   const retval = context[str1];
   if (retval === null || retval === undefined) {
@@ -9,3 +9,4 @@ export default function getContext(stack: Stack, context: Context) {
   stack.push(retval);
   return retval;
 }
+export default getContext;

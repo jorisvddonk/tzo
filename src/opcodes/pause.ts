@@ -1,6 +1,7 @@
-import { Stack, Context, VM } from "..";
+import { Stack, Context, VM, FunctionInvocationOperation } from "..";
 
-export default function pause(stack: Stack, context: Context, vm: VM) {
+const pause: FunctionInvocationOperation = (stack: Stack, context: Context, vm: VM) => {
   vm.suspend();
   return null;
 }
+export default pause;
