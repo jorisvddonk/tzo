@@ -111,7 +111,6 @@ export class VM {
             if (functionNameToPush.startsWith("_")) { // do not throw errors when function name starts with underscore
               const x: FunctionInvocationOperation = () => {
                 this.logger(`Missing function got invoked: ${functionNameToPush}!`);
-                return null;
               }
               functionToPush = x;
             } else {
@@ -174,11 +173,10 @@ export class VM {
       return null;
     }
     const oldPC = this.programCounter;
-    const retVal = instruction(this.stack, this.context, this);
+    instruction(this.stack, this.context, this);
     if (this.programCounter === oldPC) { // if the program counter did not change, increment by one!
       this.programCounter += 1;
     }
-    return retVal;
   }
 
   run() {

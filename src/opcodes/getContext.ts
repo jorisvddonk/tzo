@@ -7,6 +7,5 @@ const getContext: FunctionInvocationOperation = (stack: Stack, context: Context)
     throw new Error(`getContext: null/undefined can not be pushed to the context! StackParam: ${str1}`);
   }
   stack.push(retval);
-  return retval;
 }
 export default getContext;

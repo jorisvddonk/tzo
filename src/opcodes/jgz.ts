@@ -5,6 +5,5 @@ const jgz: FunctionInvocationOperation = (stack: Stack, context: Context, vm: VM
   if (num1 > 0) {
     vm.programCounter += 2; // it would normally already jump one, but since we modify it won't and we have to jump over ourselves
   }
-  return null;
 }
 export default jgz;

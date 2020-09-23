@@ -16,6 +16,5 @@ const openBrace: FunctionInvocationOperation = (stack: Stack, context: Context, 
     }
     pc += 1;
   }
-  return null;
 }
 export default openBrace;

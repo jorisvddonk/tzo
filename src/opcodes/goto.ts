@@ -9,7 +9,6 @@ const goto: FunctionInvocationOperation = (stack: Stack, context: Context, vm: V
     }
     vm.logger(`goto: setting pC to ${newPC} (goto ${val1}) `);
     vm.programCounter = newPC;
-    return null;
   } else if (typeof val1 === "number") {
     vm.logger(`goto: setting pC to ${val1} (goto ${val1}) `);
     vm.programCounter = val1;

@@ -18,7 +18,7 @@ export type Instruction = PushNumberInstruction | PushStringInstruction | Invoke
 
 export type NumberPushOperation = (stack: Stack, context?: Context) => number;
 export type StringPushOperation = (stack: Stack, context?: Context) => string;
-export type FunctionInvocationOperation = (stack: Stack, context: Context, vm?: VM) => string | number | Array<string | number> | null;
+export type FunctionInvocationOperation = (stack: Stack, context: Context, vm?: VM) => void;
 
 export type ReturnType<T> = T extends (...args: any[]) => infer R ? R : any;
 export type InstructionOperation = NumberPushOperation | StringPushOperation | FunctionInvocationOperation;
