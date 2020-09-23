@@ -69,6 +69,14 @@ test('should support jgz, { and } for jgz-style if statements', () => {
   expect(createVMAndRunCode(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`).stack).toEqual(["EXPECT_ONLY_THIS"]);
 });
 
+test('should support braces', () => {
+  expect(createVMAndRunCode(`1 2 { 3 4 5 } 6 7`).stack).toEqual([1, 2, 6, 7]);
+});
+
+test('should support nested braces', () => {
+  expect(createVMAndRunCode(`1 2 { 3 { 4 5 } 6 } 7`).stack).toEqual([1, 2, 7]);
+})
+
 test('should support the goto instruction', () => {
   expect(createVMAndRunCode(`5 goto "foo" "bar" "baz" "quux" exit`).stack).toEqual(["quux"]);
   expect(createVMAndRunCode(`"myLabel" goto "foo" "bar" "baz" "quux" exit`, {}, { myLabel: 5 }).stack).toEqual(["quux"]);
