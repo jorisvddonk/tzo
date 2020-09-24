@@ -12,6 +12,7 @@ import jgz from "./opcodes/jgz";
 import lt from "./opcodes/lt";
 import min from "./opcodes/min";
 import mul from "./opcodes/mul";
+import not from "./opcodes/not";
 import openBrace from "./opcodes/openBrace";
 import pause from "./opcodes/pause";
 import plus from "./opcodes/plus";
@@ -47,6 +48,7 @@ export const std_functions: Functions = {
   "min": min,
   "*": mul,
   "mul": mul,
+  "not": not,
   "concat": concat,
   "rconcat": rconcat,
   "getContext": getContext,

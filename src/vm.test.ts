@@ -64,6 +64,12 @@ test('should multiply numbers', () => {
   expect(createVMAndRunCode(`2 3 mul`).stack).toEqual([6]);
 });
 
+test('should support the not instruction', () => {
+  expect(createVMAndRunCode(`0 not`).stack).toEqual([1]);
+  expect(createVMAndRunCode(`1 not`).stack).toEqual([0]);
+  expect(createVMAndRunCode(`42 not`).stack).toEqual([0]);
+});
+
 test('should support jgz, { and } for jgz-style if statements', () => {
   expect(createVMAndRunCode(`1 jgz { "EXPECT_THIS" } "AND_THIS"`).stack).toEqual(["EXPECT_THIS", "AND_THIS"]);
   expect(createVMAndRunCode(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`).stack).toEqual(["EXPECT_ONLY_THIS"]);
