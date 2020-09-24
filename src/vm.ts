@@ -12,6 +12,7 @@ import jgz from "./opcodes/jgz";
 import lt from "./opcodes/lt";
 import min from "./opcodes/min";
 import mul from "./opcodes/mul";
+import nop from "./opcodes/nop";
 import not from "./opcodes/not";
 import openBrace from "./opcodes/openBrace";
 import pause from "./opcodes/pause";
@@ -64,6 +65,7 @@ export const std_functions: Functions = {
   "{": openBrace,
   "}": closeBrace,
   "ppc": ppc,
+  "nop": nop,
 }
 
 export class VM {

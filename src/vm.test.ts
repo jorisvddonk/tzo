@@ -147,6 +147,12 @@ test('should exit', () => {
 });
 
 test('should push program counter on ppc instruction', () => {
-  expect(createVMAndRunCode(`"one" "two" ppc`).stack).toEqual(["one", "two", 2]);
+  expect(createVMAndRunCode(`nop nop ppc`).stack).toEqual([2]);
   expect(createVMAndRunCode(`ppc`).stack).toEqual([0]);
+});
+
+test('should do nothing on nop instruction', () => {
+  expect(createVMAndRunCode(`nop nop nop`).stack).toEqual([]);
+  expect(createVMAndRunCode(`nop`).programCounter).toEqual(1);
+  expect(createVMAndRunCode(`nop`).context).toEqual({});
 });
