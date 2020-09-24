@@ -145,3 +145,8 @@ test('should exit', () => {
   expect(vm.exit).toEqual(true);
   expect(vm.programCounter).toEqual(3);
 });
+
+test('should push program counter on ppc instruction', () => {
+  expect(createVMAndRunCode(`"one" "two" ppc`).stack).toEqual(["one", "two", 2]);
+  expect(createVMAndRunCode(`ppc`).stack).toEqual([0]);
+});

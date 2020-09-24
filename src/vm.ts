@@ -16,6 +16,7 @@ import not from "./opcodes/not";
 import openBrace from "./opcodes/openBrace";
 import pause from "./opcodes/pause";
 import plus from "./opcodes/plus";
+import ppc from "./opcodes/ppc";
 import randInt from "./opcodes/randInt";
 import rconcat from "./opcodes/rconcat";
 import setContext from "./opcodes/setContext";
@@ -62,6 +63,7 @@ export const std_functions: Functions = {
   "goto": goto,
   "{": openBrace,
   "}": closeBrace,
+  "ppc": ppc,
 }
 
 export class VM {
