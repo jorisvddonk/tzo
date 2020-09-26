@@ -165,3 +165,12 @@ test('should calculate and', () => {
   expect(createVMAndRunCode(`1 9 and`).stack).toEqual([1]);
   expect(createVMAndRunCode(`9 1 and`).stack).toEqual([1]);
 });
+
+test('should calculate or', () => {
+  expect(createVMAndRunCode(`1 1 or`).stack).toEqual([1]);
+  expect(createVMAndRunCode(`1 0 or`).stack).toEqual([1]);
+  expect(createVMAndRunCode(`0 1 or`).stack).toEqual([1]);
+  expect(createVMAndRunCode(`0 0 or`).stack).toEqual([0]);
+  expect(createVMAndRunCode(`1 9 or`).stack).toEqual([1]);
+  expect(createVMAndRunCode(`9 1 or`).stack).toEqual([1]);
+});

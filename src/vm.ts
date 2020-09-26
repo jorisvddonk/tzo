@@ -16,6 +16,7 @@ import mul from "./opcodes/mul";
 import nop from "./opcodes/nop";
 import not from "./opcodes/not";
 import openBrace from "./opcodes/openBrace";
+import or from "./opcodes/or";
 import pause from "./opcodes/pause";
 import plus from "./opcodes/plus";
 import ppc from "./opcodes/ppc";
@@ -68,6 +69,7 @@ export const std_functions: Functions = {
   "ppc": ppc,
   "nop": nop,
   "and": and,
+  "or": or,
 }
 
 export class VM {
