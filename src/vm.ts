@@ -1,5 +1,6 @@
 import debug from "debug";
 import { Context, FunctionInvocationOperation, Functions, Instruction, InstructionOperation, Instructions, instructiontype, InvokeFunctionInstruction, LabelMap, NumberPushOperation, PushNumberInstruction, PushStringInstruction, Stack, StringPushOperation, TzoVMState } from "./interfaces";
+import and from "./opcodes/and";
 import charCode from "./opcodes/charCode";
 import closeBrace from "./opcodes/closeBrace";
 import concat from "./opcodes/concat";
@@ -66,6 +67,7 @@ export const std_functions: Functions = {
   "}": closeBrace,
   "ppc": ppc,
   "nop": nop,
+  "and": and,
 }
 
 export class VM {

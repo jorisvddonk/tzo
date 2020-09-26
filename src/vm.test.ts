@@ -156,3 +156,12 @@ test('should do nothing on nop instruction', () => {
   expect(createVMAndRunCode(`nop`).programCounter).toEqual(1);
   expect(createVMAndRunCode(`nop`).context).toEqual({});
 });
+
+test('should calculate and', () => {
+  expect(createVMAndRunCode(`1 1 and`).stack).toEqual([1]);
+  expect(createVMAndRunCode(`1 0 and`).stack).toEqual([0]);
+  expect(createVMAndRunCode(`0 1 and`).stack).toEqual([0]);
+  expect(createVMAndRunCode(`0 0 and`).stack).toEqual([0]);
+  expect(createVMAndRunCode(`1 9 and`).stack).toEqual([1]);
+  expect(createVMAndRunCode(`9 1 and`).stack).toEqual([1]);
+});
