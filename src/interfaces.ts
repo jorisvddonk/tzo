@@ -2,7 +2,8 @@ import { VM } from "./vm";
 
 export type instructiontype = "push-number-instruction" | "push-string-instruction" | "invoke-function-instruction";
 export type BaseInstruction<T extends instructiontype> = {
-  type: T
+  type: T,
+  comment?: string
 }
 export type PushNumberInstruction = BaseInstruction<"push-number-instruction"> & {
   value: number;

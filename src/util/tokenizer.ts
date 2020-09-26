@@ -7,14 +7,14 @@ const numberPushOperationRegexp = /^([0-9]+)$/;
 const functionInvocationOperationRegexp = /^(\S+)$/;
 const labelInstructionRegexp = /^\#(\S+)$/;
 
-export const pushNumber: (val: number) => PushNumberInstruction = val => {
-  return u("push-number-instruction", { value: val });
+export const pushNumber: (val: number, comment?: string) => PushNumberInstruction = (val, comment) => {
+  return u("push-number-instruction", { value: val, comment });
 };
-export const pushString: (val: string) => PushStringInstruction = val => {
-  return u("push-string-instruction", { value: val });
+export const pushString: (val: string, comment?: string) => PushStringInstruction = (val, comment) => {
+  return u("push-string-instruction", { value: val, comment });
 };
-export const invokeFunction: (name: string) => InvokeFunctionInstruction = name => {
-  return u("invoke-function-instruction", { functionName: name });
+export const invokeFunction: (name: string, comment?: string) => InvokeFunctionInstruction = (name, comment) => {
+  return u("invoke-function-instruction", { functionName: name, comment });
 };
 
 export class Tokenizer {
