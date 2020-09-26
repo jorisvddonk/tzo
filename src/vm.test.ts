@@ -174,3 +174,10 @@ test('should calculate or', () => {
   expect(createVMAndRunCode(`1 9 or`).stack).toEqual([1]);
   expect(createVMAndRunCode(`9 1 or`).stack).toEqual([1]);
 });
+
+test('should duplicate top item from stack via dup', () => {
+  expect(createVMAndRunCode(`1 dup`).stack).toEqual([1, 1]);
+  expect(createVMAndRunCode(`0 dup`).stack).toEqual([0, 0]);
+  expect(createVMAndRunCode(`"test" dup`).stack).toEqual(["test", "test"]);
+  expect(createVMAndRunCode(`42 dup`).stack).toEqual([42, 42]);
+});

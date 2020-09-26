@@ -4,6 +4,7 @@ import and from "./opcodes/and";
 import charCode from "./opcodes/charCode";
 import closeBrace from "./opcodes/closeBrace";
 import concat from "./opcodes/concat";
+import dup from "./opcodes/dup";
 import eq from "./opcodes/eq";
 import exit from "./opcodes/exit";
 import getContext from "./opcodes/getContext";
@@ -70,6 +71,7 @@ export const std_functions: Functions = {
   "nop": nop,
   "and": and,
   "or": or,
+  "dup": dup,
 }
 
 export class VM {
