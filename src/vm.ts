@@ -194,7 +194,13 @@ export class VM {
   run() {
     this.pause = false;
     while (this.exit !== true && this.pause as any !== true) {
-      this.tick();
+      try {
+        this.tick();
+      } catch (e) {
+        const err = new Error(`An error occurred!\nStack: ${this.stack}\nPC: ${this.programCounter}\nContext: ${JSON.stringify(this.context)}\nerr: ${e}`);
+        this.logger(err);
+        throw err;
+      }
     }
   }
 }
