@@ -3,7 +3,7 @@ import { Instruction } from "../interfaces";
 import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../";
 
 const stringPushOperationRegexp = /^\"(.+)\"$/;
-const numberPushOperationRegexp = /^-?([0-9]+)$/;
+const numberPushOperationRegexp = /^(-?[0-9]+)$/;
 const functionInvocationOperationRegexp = /^(\S+)$/;
 const labelInstructionRegexp = /^\#(\S+)$/;
 
