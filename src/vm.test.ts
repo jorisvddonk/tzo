@@ -75,6 +75,17 @@ test('should support jgz, { and } for jgz-style if statements', () => {
   expect(createVMAndRunCode(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`).stack).toEqual(["EXPECT_ONLY_THIS"]);
 });
 
+test('should support jz', () => {
+  expect(createVMAndRunCode(`0 jz "no"`).stack).toEqual([]);
+  expect(createVMAndRunCode(`1 jz "yes"`).stack).toEqual(["yes"]);
+});
+
+test('should support jgz', () => {
+  expect(createVMAndRunCode(`0 jgz "yes"`).stack).toEqual(["yes"]);
+  expect(createVMAndRunCode(`1 jgz "no"`).stack).toEqual([]);
+});
+
+
 test('should support braces', () => {
   expect(createVMAndRunCode(`1 2 { 3 4 5 } 6 7`).stack).toEqual([1, 2, 6, 7]);
 });

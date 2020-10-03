@@ -11,6 +11,7 @@ import getContext from "./opcodes/getContext";
 import goto from "./opcodes/goto";
 import gt from "./opcodes/gt";
 import jgz from "./opcodes/jgz";
+import jz from "./opcodes/jz";
 import lt from "./opcodes/lt";
 import min from "./opcodes/min";
 import mul from "./opcodes/mul";
@@ -43,6 +44,7 @@ export const std_functions: Functions = {
   "lt": lt,
   "eq": eq,
   "jgz": jgz,
+  "jz": jz,
   "exit": exit,
   "pause": pause,
   "goto": goto,
