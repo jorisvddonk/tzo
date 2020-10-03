@@ -195,3 +195,10 @@ test('should duplicate top item from stack via dup', () => {
   expect(createVMAndRunCode(`"test" dup`).stack).toEqual(["test", "test"]);
   expect(createVMAndRunCode(`42 dup`).stack).toEqual([42, 42]);
 });
+
+test('should pop top item from stack via pop', () => {
+  expect(createVMAndRunCode(`1 pop`).stack).toEqual([]);
+  expect(createVMAndRunCode(`0 pop`).stack).toEqual([]);
+  expect(createVMAndRunCode(`"test" pop`).stack).toEqual([]);
+  expect(createVMAndRunCode(`1 2 3 pop`).stack).toEqual([1, 2]);
+});

@@ -21,6 +21,7 @@ import openBrace from "./opcodes/openBrace";
 import or from "./opcodes/or";
 import pause from "./opcodes/pause";
 import plus from "./opcodes/plus";
+import pop from "./opcodes/pop";
 import ppc from "./opcodes/ppc";
 import randInt from "./opcodes/randInt";
 import rconcat from "./opcodes/rconcat";
@@ -55,6 +56,7 @@ export const std_functions: Functions = {
   "and": and,
   "or": or,
   "dup": dup,
+  "pop": pop
 }
 
 export class VM {
