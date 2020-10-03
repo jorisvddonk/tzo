@@ -26,6 +26,7 @@ test('should have an initial state', () => {
 
 test('should push numbers to the stack', () => {
   expect(createVMAndRunCode(`1 2 3`).stack).toEqual([1, 2, 3]);
+  expect(createVMAndRunCode(`-1 -2 -3`).stack).toEqual([-1, -2, -3]);
 });
 
 test('should push strings to the stack', () => {
@@ -78,10 +79,12 @@ test('should support jgz, { and } for jgz-style if statements', () => {
 test('should support jz', () => {
   expect(createVMAndRunCode(`0 jz "no"`).stack).toEqual([]);
   expect(createVMAndRunCode(`1 jz "yes"`).stack).toEqual(["yes"]);
+  expect(createVMAndRunCode(`-1 jz "yes"`).stack).toEqual(["yes"]);
 });
 
 test('should support jgz', () => {
   expect(createVMAndRunCode(`0 jgz "yes"`).stack).toEqual(["yes"]);
+  expect(createVMAndRunCode(`-1 jgz "yes"`).stack).toEqual(["yes"]);
   expect(createVMAndRunCode(`1 jgz "no"`).stack).toEqual([]);
 });
 
