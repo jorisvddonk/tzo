@@ -78,7 +78,7 @@ export class Tokenizer {
      * Parse a list of tokens into a list of Instructions and a LabelMap
      */
     const labelMap: LabelMap = {};
-    let i = 0;
+    let i = -1;
     const instructions: Instruction[] = tokens.map(token => {
       const matchLabelInstruction = token.match(labelInstructionRegexp);
       if (matchLabelInstruction !== null) {
