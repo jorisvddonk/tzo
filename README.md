@@ -35,7 +35,6 @@ Each item on the stack can either be a _number_ (floating point or integer), or 
 | opcode(s)    | arguments (rightmost item: top of stack) | argument types              | description                                                                                                                                                                                                                                                                                                                                                                      |
 |--------------|------------------------------------------|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `nop`        |                                          |                             | does nothing                                                                                                                                                                                                                                                                                                                                                                     |
-| `push`       | A                                        | string/number               | Pushes A onto the stack                                                                                                                                                                                                                                                                                                                                                          |
 | `pop`        |                                          |                             | Pops a value off of the stack, disarding it in the process                                                                                                                                                                                                                                                                                                                       |
 | `+` / `plus` | B, A                                     | number, number              | Adds A to B and pushes the result onto the stack                                                                                                                                                                                                                                                                                                                                 |
 | `-` / `min`  | B, A                                     | number, number              | Subtracts B from A and pushes the result onto the stack                                                                                                                                                                                                                                                                                                                          |
@@ -61,3 +60,54 @@ Each item on the stack can either be a _number_ (floating point or integer), or 
 | `getContext` | A                                        | string                      | Pops A off the stack, then gets the context value pointed to by A and pushes it onto the stack                                                                                                                                                                                                                                                                                   |
 | `setContext` | B, A                                     | string/number, string       | Pops A and B off the stack. The context value pointed to by A is set to B                                                                                                                                                                                                                                                                                                        |
 | `goto`       | A                                        | string/number               | Pops A off the stack. If it is a number, sets the program counter to that value. If it is a string, looks up the string in the labelmap and sets the program counter to the value found in the label map                                                                                                                                                                         |
+
+# Standard Representation
+
+The Standard Representation of Tzo VM code is a JSON array:
+
+```json
+[
+  {
+    "type": "push-number-instruction",
+    "value": 42
+  },
+  {
+    "type": "push-string-instruction",
+    "value": "Foo"
+  },
+  {
+    "type": "invoke-function-instruction",
+    "functionName": "setContext"
+  }
+]
+```
+
+Though not space-efficient, this is *very* easy to parse in a wide variety of languages, and well-specified. If more space-efficient representations are preferred, custom integrations can be made to allow this.
+
+Comments can be added to add clarification, where needed:
+
+```json
+[
+  {
+    "type": "push-number-instruction",
+    "value": 0
+  },
+  {
+    "type": "invoke-function-instruction",
+    "functionName": "jgz"
+  },
+  {
+    "type": "invoke-function-instruction",
+    "functionName": "{"
+  },
+  {
+    "type": "push-string-instruction",
+    "functionName": "hi",
+    "comment": "This instruction will never be invoked!"
+  },
+  {
+    "type": "invoke-function-instruction",
+    "functionName": "}"
+  }
+]
+```
