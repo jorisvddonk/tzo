@@ -151,3 +151,23 @@ Labels can be placed (to serve as jump targets for the `goto` opcode) on any ins
 ```
 
 (the above program, when run, will halt with [`1`, `3`] on the stack)
+
+# ConciseText Representation
+
+The ConciseText representation, is - as its name suggests - a lot more concise than the standard representation, but also slightly more difficult to parse. See [`src/grammars/ConciseText.g4`](src/grammars/ConciseText.g4) for an [ANTLR4](https://www.antlr.org/) grammar, and [`/reference/ConciseText.rrd.pdf`](/reference/ConciseText.rrd.pdf) for reference documentation.
+
+Examples:
+
+```text
+1 "Awesome" goto 2 #Awesome nop
+```
+(encodes the same example as above)
+
+```text
+0 jgz { "hi" }
+```
+
+```text
+"Hello" "," " world" rconcat rconcat
+```
+(will halt with `"Hello, world"` on the stack)
