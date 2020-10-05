@@ -26,6 +26,7 @@ import ppc from "./opcodes/ppc";
 import randInt from "./opcodes/randInt";
 import rconcat from "./opcodes/rconcat";
 import setContext from "./opcodes/setContext";
+import stacksize from "./opcodes/stacksize";
 
 export const std_functions: Functions = {
   "randInt": randInt,
@@ -56,7 +57,8 @@ export const std_functions: Functions = {
   "and": and,
   "or": or,
   "dup": dup,
-  "pop": pop
+  "pop": pop,
+  "stacksize": stacksize
 }
 
 export class VM {
