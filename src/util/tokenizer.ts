@@ -110,6 +110,10 @@ export class Tokenizer {
       throw new Error(`Could not parse token: \`${token}\``);
     }).filter(instr => instr !== undefined);
 
-    return { instructions, labelMap };
+    Object.entries(labelMap).forEach(entry => {
+      instructions[entry[1]].label = entry[0];
+    });
+
+    return instructions;
   }
 }

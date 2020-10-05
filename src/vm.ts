@@ -98,8 +98,18 @@ export class VM {
     return retval;
   }
 
-  getVMInstructions(instructions: Instruction[]) {
-    const vmInstructions: InstructionOperation[] = instructions.map(instruction => {
+  getVMInstructions(instructions: Instruction[], labelMap?: LabelMap) {
+    if (labelMap === undefined) {
+      labelMap = {};
+    }
+    const vmInstructions: InstructionOperation[] = instructions.map((instruction, instrIndex) => {
+      if (instruction.label !== undefined) {
+        if (labelMap[instruction.label] === undefined) {
+          labelMap[instruction.label] = instrIndex;
+        } else {
+          throw new Error(`label already defined: ${instruction.label}!`);
+        }
+      }
       switch (instruction.type) {
         case "invoke-function-instruction":
           const functionNameToPush = (instruction as InvokeFunctionInstruction).functionName;
@@ -136,19 +146,19 @@ export class VM {
           throw new Error(`Unsupported instruction type!`);
       }
     });
-    return vmInstructions;
+    return { vmInstructions, labelMap };
   }
 
   loadProgramList(instructions: Instruction[], labelMap?: LabelMap) {
-    this.programList = this.getVMInstructions(instructions);
-    if (labelMap !== undefined) {
-      this.labelMap = labelMap;
-    }
+    const parsed_instructions = this.getVMInstructions(instructions, labelMap);
+    this.programList = parsed_instructions.vmInstructions;
+    this.labelMap = parsed_instructions.labelMap;
   }
 
   loadVMState(tzoVMState: TzoVMState) {
-    this.programList = this.getVMInstructions(tzoVMState.programList);
-    this.labelMap = tzoVMState.labelMap;
+    const parsed_instructions = this.getVMInstructions(tzoVMState.programList, tzoVMState.labelMap);
+    this.programList = parsed_instructions.vmInstructions;
+    this.labelMap = parsed_instructions.labelMap;
     this.stack = tzoVMState.stack;
     this.context = tzoVMState.context;
     this.programCounter = tzoVMState.programCounter;

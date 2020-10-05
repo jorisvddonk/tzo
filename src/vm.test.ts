@@ -1,5 +1,15 @@
-import { Context, Tokenizer, VM } from ".";
+import { Context, Instruction, Tokenizer, VM } from ".";
 import { LabelMap } from "./interfaces";
+
+function createVMAndRunStdRepCode(instructions: Instruction[], initialContext?: Context, initialLabelMap?: LabelMap) {
+  if (initialLabelMap === undefined) {
+    initialLabelMap = {};
+  }
+  const vm = new VM(initialContext !== undefined ? initialContext : {});
+  vm.loadProgramList(instructions, initialLabelMap);
+  vm.run();
+  return vm;
+}
 
 function createVMAndRunCode(codeBlock: string, initialContext?: Context, initialLabelMap?: LabelMap) {
   if (initialLabelMap === undefined) {
@@ -7,8 +17,8 @@ function createVMAndRunCode(codeBlock: string, initialContext?: Context, initial
   }
   const vm = new VM(initialContext !== undefined ? initialContext : {});
   const tokenizer = new Tokenizer();
-  const { instructions, labelMap } = tokenizer.transform(tokenizer.tokenize(codeBlock));
-  vm.loadProgramList(instructions, { ...initialLabelMap, ...labelMap });
+  const instructions = tokenizer.transform(tokenizer.tokenize(codeBlock));
+  vm.loadProgramList(instructions, initialLabelMap);
   vm.run();
   return vm;
 }
@@ -201,4 +211,66 @@ test('should pop top item from stack via pop', () => {
   expect(createVMAndRunCode(`0 pop`).stack).toEqual([]);
   expect(createVMAndRunCode(`"test" pop`).stack).toEqual([]);
   expect(createVMAndRunCode(`1 2 3 pop`).stack).toEqual([1, 2]);
+});
+
+test('should support labels via tokenizer', () => {
+  const vm = createVMAndRunCode(`1 "Awesome" goto 2 3 #Awesome nop`);
+  expect(vm.labelMap["Awesome"]).toBe(4);
+  expect(vm.stack).toEqual([1, 3]);
+});
+
+test('should support Standard Representation code', () => {
+  expect(createVMAndRunStdRepCode([
+    {
+      "type": "push-number-instruction",
+      "value": 42
+    },
+    {
+      "type": "push-number-instruction",
+      "value": 8
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "+"
+    },
+    {
+      "type": "push-string-instruction",
+      "value": "Foo"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "setContext"
+    }
+  ]).context).toEqual({ "Foo": 50 });
+})
+
+test('should support labels in Standard Representation code', () => {
+  expect(createVMAndRunStdRepCode([
+    {
+      "type": "push-number-instruction",
+      "value": 1
+    },
+    {
+      "type": "push-string-instruction",
+      "value": "Awesome"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "goto"
+    },
+    {
+      "type": "push-number-instruction",
+      "value": 2,
+      "comment": "Due to the goto above, this instruction will be skipped, and so 2 won't be pushed to the stack"
+    },
+    {
+      "type": "push-number-instruction",
+      "value": 3,
+      "label": "Awesome"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "nop"
+    }
+  ]).stack).toEqual([1, 3]);
 });
