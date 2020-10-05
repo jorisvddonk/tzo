@@ -28,7 +28,11 @@ The Tzo virtual machine is at its core a simple stack machine. All _standard ope
 
 Each item on the stack can either be a _number_ (floating point or integer), or a _string_. There are no booleans inherently. The size and precision of numbers is left as an implementation detail. The reference implementation in this repository uses JavaScript's basic number type (64 bit floating point) for all numbers.
 
+Each instruction in the program list (_either_ an opcode invocation, a string literal to be pushed onto the stack, or a number literal to be pushed onto the stack) takes up 1 space in the program list. The program list starts at 0.
+
 # Opcodes
+
+The following section describes all opcodes from the standard runtime, which implementations are expected to implement. Note that it is also possible to push string or number literals onto the stack; this is not documented here as there is no associated opcode for that.
 
 *NOTE*: Even if not explicitly mentioned, all arguments are _always_ popped off the stack, and not pushed back onto it unless otherwise explicitly mentioned.
 
@@ -111,3 +115,39 @@ Comments can be added to add clarification, where needed:
   }
 ]
 ```
+
+Labels can be placed (to serve as jump targets for the `goto` opcode) on any instruction as well:
+
+```json
+[
+  {
+    "type": "push-number-instruction",
+    "value": 1
+  },
+  {
+    "type": "push-string-instruction",
+    "value": "Awesome",
+    "comment": "This will set the program counter to whatever value is pointed to by the \"Awesome\" label"
+  },
+  {
+    "type": "invoke-function-instruction",
+    "functionName": "goto"
+  },
+  {
+    "type": "push-number-instruction",
+    "value": 2,
+    "comment": "Due to the goto above, this instruction will be skipped, and so 2 won't be pushed to the stack"
+  },
+  {
+    "type": "push-number-instruction",
+    "value": 3,
+    "label": "Awesome"
+  },
+  {
+    "type": "invoke-function-instruction",
+    "functionName": "nop"
+  }
+]
+```
+
+(the above program, when run, will halt with [`1`, `3`] on the stack)
