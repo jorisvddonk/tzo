@@ -2,9 +2,9 @@ grammar ConciseText;
 
 instructions: (pushNumber | pushString | invokeFunction)*;
 
-pushNumber: NUMBER LABEL?;
-pushString: STRING LABEL?;
-invokeFunction: OPCODE LABEL?;
+pushNumber: NUMBER LABEL? (WHITESPACE | EOF);
+pushString: STRING LABEL? (WHITESPACE | EOF);
+invokeFunction: OPCODE LABEL? (WHITESPACE | EOF);
 
 fragment BACKSLASH: '\\';
 fragment QUOTE: '"';
@@ -15,3 +15,5 @@ NUMBER: '-'? [0-9]+ '.'? [0-9]*;
 STRING: QUOTE (ESCAPED_QUOTE | ESCAPED_BACKSLASH | ~'"')* QUOTE;
 OPCODE: ~'#' ~('\t' | '\r' | '\n' | ' ')*;
 LABEL: '#' ~('\t' | '\r' | '\n' | ' ')*;
+
+WHITESPACE: ('\t' | '\r' | '\n' | ' ')+;

@@ -154,7 +154,7 @@ Labels can be placed (to serve as jump targets for the `goto` opcode) on any ins
 
 # ConciseText Representation
 
-The ConciseText representation, is - as its name suggests - a lot more concise than the standard representation, but also slightly more difficult to parse. See [`src/grammars/ConciseText.g4`](src/grammars/ConciseText.g4) for an [ANTLR4](https://www.antlr.org/) grammar, and [`/reference/ConciseText.rrd.pdf`](/reference/ConciseText.rrd.pdf) for reference documentation.
+The ConciseText representation, is - as its name suggests - a lot more concise than the standard representation, but also slightly more difficult to parse. See [`src/grammars/ConciseText.g4`](src/grammars/ConciseText.g4) for an [ANTLR4](https://www.antlr.org/) grammar, and [`/reference/ConciseText.rrd.pdf`](/reference/ConciseText.rrd.pdf) for a railroad diagram of this grammar.
 
 Examples:
 
