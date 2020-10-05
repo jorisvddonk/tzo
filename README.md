@@ -30,6 +30,10 @@ Each item on the stack can either be a _number_ (floating point or integer), or 
 
 Each instruction in the program list (_either_ an opcode invocation, a string literal to be pushed onto the stack, or a number literal to be pushed onto the stack) takes up 1 space in the program list. The program list starts at 0.
 
+## Standard input and output
+
+By default, there is no standard input and output. Consider either using the stack as your standard input and output, or defining your own custom (foreign) opcodes for standard input and output (see below).
+
 # Opcodes
 
 The following section describes all opcodes from the standard runtime, which implementations are expected to implement. Note that it is also possible to push string or number literals onto the stack; this is not documented here as there is no associated opcode for that.
@@ -64,6 +68,14 @@ The following section describes all opcodes from the standard runtime, which imp
 | `getContext` | A                                        | string                      | Pops A off the stack, then gets the context value pointed to by A and pushes it onto the stack                                                                                                                                                                                                                                                                                   |
 | `setContext` | B, A                                     | string/number, string       | Pops A and B off the stack. The context value pointed to by A is set to B                                                                                                                                                                                                                                                                                                        |
 | `goto`       | A                                        | string/number               | Pops A off the stack. If it is a number, sets the program counter to that value. If it is a string, looks up the string in the labelmap and sets the program counter to the value found in the label map                                                                                                                                                                         |
+
+## Custom (Foreign) Opcodes
+
+As you can see above, the default set of opcodes is pretty barebones, and does not support a lot of functionality. This is by design!
+
+The Tzo VM is _designed to be extended_. Define your own opcodes, their behaviour, and then use these custom opcodes in your programs! Programs that target your custom opcodes will obviously not be executable outside of your VM or a VM implementing the same specification, but that doesn't matter!
+
+The [QuestMark](https://github.com/jorisvddonk/questmark) [QuestVM](https://github.com/jorisvddonk/questmark/blob/fb37a58dd38c9dda38d8c9b6dd3fc07daaa8ec05/src/QuestVM.ts) is an example of a customized Tzo VM.
 
 # Standard Representation
 
