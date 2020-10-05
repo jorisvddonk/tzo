@@ -67,6 +67,7 @@ The following section describes all opcodes from the standard runtime, which imp
 | `}`          |                                          |                             | Does nothing by itself, and acts as a `nop`.                                                                                                                                                                                                                                                                                                                                     |
 | `getContext` | A                                        | string                      | Pops A off the stack, then gets the context value pointed to by A and pushes it onto the stack                                                                                                                                                                                                                                                                                   |
 | `setContext` | B, A                                     | string/number, string       | Pops A and B off the stack. The context value pointed to by A is set to B                                                                                                                                                                                                                                                                                                        |
+| `delContext` | A                                        | string                      | Pops A off the stack, then deletes the value (and key / pointer, depending on implementation) pointed to by A completely, effectively freeing it.                                                                                                                                                                                                                                |
 | `goto`       | A                                        | string/number               | Pops A off the stack. If it is a number, sets the program counter to that value. If it is a string, looks up the string in the labelmap and sets the program counter to the value found in the label map                                                                                                                                                                         |
 | `stacksize`  |                                          |                             | Push the _current_ length of the stack to the stack itself. NOTE: the total length of the stack after this operation will be 1 _larger_ than the actual value!                                                                                                                                                                                                                   |
 
@@ -252,7 +253,7 @@ The following bit of code defines a "mul3" function, which pops an item off the 
   nop #mul3
   "_mul3_return_pc" setContext
   3 *
-  "_mul3_return_pc" getContext 3 + goto
+  "_mul3_return_pc" getContext 3 + "_mul3_return_pc" delContext goto
 }
 ```
 

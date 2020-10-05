@@ -4,6 +4,7 @@ import and from "./opcodes/and";
 import charCode from "./opcodes/charCode";
 import closeBrace from "./opcodes/closeBrace";
 import concat from "./opcodes/concat";
+import delContext from "./opcodes/delContext";
 import dup from "./opcodes/dup";
 import eq from "./opcodes/eq";
 import exit from "./opcodes/exit";
@@ -42,6 +43,7 @@ export const std_functions: Functions = {
   "rconcat": rconcat,
   "getContext": getContext,
   "setContext": setContext,
+  "delContext": delContext,
   "gt": gt,
   "lt": lt,
   "eq": eq,

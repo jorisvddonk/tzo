@@ -54,6 +54,12 @@ test('should get context', () => {
   expect(createVMAndRunCode(`"one" getContext`, ctx).stack).toEqual([1]);
 });
 
+test('should delete context', () => {
+  expect(createVMAndRunCode(`"FOO" "bar" setContext "bar" delContext`).context.bar).toBe(undefined);
+  expect(JSON.stringify(createVMAndRunCode(`"FOO" "bar" setContext "bar" delContext`).context)).toBe("{}");
+});
+
+
 test('should throw an error when trying to get context for unknown variables', () => {
   const ctx = { "ham": "ster", "one": 1, "two": 2 };
   expect(() => createVMAndRunCode(`"asdfzxc" getContext`, ctx)).toThrow();
@@ -289,18 +295,18 @@ test('example tests', () => {
 });
 
 test('poor man\'s function', () => {
-  expect(createVMAndRunCode(`
+  const vm = createVMAndRunCode(`
 {
   nop #mul3
   "_mul3_return_pc" setContext
   3 *
-  "_mul3_return_pc" getContext 3 + goto
+  "_mul3_return_pc" getContext 3 + "_mul3_return_pc" delContext goto
 }
 1 ppc "mul3" goto
 2 ppc "mul3" goto
 3 ppc "mul3" goto
 4 ppc "mul3" goto
-`).stack).toEqual([3, 6, 9, 12]);
-
-
+`);
+  expect(vm.stack).toEqual([3, 6, 9, 12]);
+  expect(JSON.stringify(vm.context)).toEqual("{}");
 });
