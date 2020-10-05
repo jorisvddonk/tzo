@@ -274,3 +274,9 @@ test('should support labels in Standard Representation code', () => {
     }
   ]).stack).toEqual([1, 3]);
 });
+
+test('example tests', () => {
+  expect(createVMAndRunCode(`1 1 + 2 eq jgz { "1 + 1 = 2!" }`).stack).toEqual(["1 + 1 = 2!"]);
+  expect(createVMAndRunCode(`1 1 + 2 eq dup jgz { "1 + 1 = 2!" pop } jz { "1 + 1 is not 2!?" }`).stack).toEqual([]);
+  expect(createVMAndRunCode(`1 1 + 2 eq "conditionResult" setContext "conditionResult" getContext jgz { "1 + 1 = 2!" } "conditionResult" getContext jz { "1 + 1 is not 2!?" }`).stack).toEqual(["1 + 1 = 2!"]);
+});

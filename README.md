@@ -171,3 +171,51 @@ Examples:
 "Hello" "," " world" rconcat rconcat
 ```
 (will halt with `"Hello, world"` on the stack)
+
+# Techniques
+
+This section lists some common techniques. For conciseness, all examples will be given in the ConciseText representation.
+
+## Commenting out code
+
+Want to "comment out" some code? Encase it within `{` and `}`!
+
+```text
+1 2 3 { "do" "not" "push" "these" "strings" } 4 5 6
+```
+
+## If
+
+Simple if statements:
+
+```text
+1 1 + 2 eq jgz {
+  "1 + 1 = 2!"
+}
+```
+
+## If/else
+
+duplicate the evaluation result via `dup` to create an if/else block.
+NOTE: you need to ensure that within the `if` block, you do NOT push to the stack!
+
+```text
+1 1 + 2 eq dup jgz {
+  "1 + 1 = 2!" pop
+} jz {
+  "1 + 1 is not 2!?"
+}
+```
+(if the `pop` statement here was omitted, `jz` would be erroneously evaluated against `"1 + 1 = 2!"`)
+
+if you need to ensure that within the `if` block you _can_ push to the stack (note: conditionally pushing to the stack is dangerous! ), one technique you can use is pushing the condition expression to the context:
+
+```text
+1 1 + 2 eq "conditionResult" setContext
+"conditionResult" getContext jgz {
+  "1 + 1 = 2!"
+}
+"conditionResult" getContext jz {
+  "1 + 1 is not 2!?"
+}
+```
