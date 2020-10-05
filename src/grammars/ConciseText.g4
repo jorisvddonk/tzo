@@ -1,6 +1,10 @@
 grammar ConciseText;
 
-instructions_and_labels: (NUMBER | STRING | OPCODE | LABEL)*;
+instructions: (pushNumber | pushString | invokeFunction)*;
+
+pushNumber: NUMBER LABEL?;
+pushString: STRING LABEL?;
+invokeFunction: OPCODE LABEL?;
 
 fragment BACKSLASH: '\\';
 fragment QUOTE: '"';
