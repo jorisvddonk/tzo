@@ -232,3 +232,41 @@ if you need to ensure that within the `if` block you _can_ push to the stack (no
   "1 + 1 is not 2!?"
 }
 ```
+
+## Cleaning the stack
+
+Got some stuff on your stack and want to clean it completely? Here is a simple list of instructions to reset the stack to length 0:
+
+```text
+stacksize jgz { pop } stacksize jgz { 9 ppc - goto }
+```
+
+## Poor man's functions
+
+Tzo does not support functions by default, but you can recreate them using `goto` and `ppc`.
+
+The following bit of code defines a "mul3" function, which pops an item off the stack, multiplies that by 3, and pushes the result to the stack.
+
+```text
+{
+  nop #mul3
+  "_mul3_return_pc" setContext
+  3 *
+  "_mul3_return_pc" getContext 3 + goto
+}
+```
+
+Note a few things:
+
+1. A temporary context value is used to store the program counter to return to. This means that _it is not possible to call these "functions" recursively_!
+2. `{` and `}` are used to ensure that the function is not accidentally called, allowing it to be placed at the top of a program listing without issue.
+3. The code can be shortened by 1 operation by removing the `nop` instruction and moving the `mul3` label one forwards.
+
+To invoke this "function", push its argument on the stack and then call `ppc "mul3" goto` :
+
+```text
+1 ppc "mul3" goto
+2 ppc "mul3" goto
+3 ppc "mul3" goto
+4 ppc "mul3" goto
+```

@@ -285,4 +285,22 @@ test('example tests', () => {
   expect(createVMAndRunCode(`1 1 + 2 eq dup jgz { "1 + 1 = 2!" pop } jz { "1 + 1 is not 2!?" }`).stack).toEqual([]);
   expect(createVMAndRunCode(`1 1 + 2 eq "conditionResult" setContext "conditionResult" getContext jgz { "1 + 1 = 2!" } "conditionResult" getContext jz { "1 + 1 is not 2!?" }`).stack).toEqual(["1 + 1 = 2!"]);
   expect(createVMAndRunCode(`"Hello" "," " world!" rconcat rconcat`).stack).toEqual(["Hello, world!"]);
+  expect(createVMAndRunCode(`1 2 3 4 "hi" 0 -1 0 0 1 1 stacksize jgz { pop } stacksize jgz { 9 ppc - goto }`).stack).toEqual([]);
+});
+
+test('poor man\'s function', () => {
+  expect(createVMAndRunCode(`
+{
+  nop #mul3
+  "_mul3_return_pc" setContext
+  3 *
+  "_mul3_return_pc" getContext 3 + goto
+}
+1 ppc "mul3" goto
+2 ppc "mul3" goto
+3 ppc "mul3" goto
+4 ppc "mul3" goto
+`).stack).toEqual([3, 6, 9, 12]);
+
+
 });
