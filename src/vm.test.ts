@@ -144,11 +144,15 @@ test('should calculate less than', () => {
 test('should concat', () => {
   expect(createVMAndRunCode(`"one" "two" concat`).stack).toEqual(["twoone"]);
   expect(createVMAndRunCode(`"1" "two" concat`).stack).toEqual(["two1"]);
+  expect(createVMAndRunCode(`1 2 concat`).stack).toEqual(["21"]);
+  expect(createVMAndRunCode(`"one" 2 concat`).stack).toEqual(["2one"]);
 });
 
 test('should rconcat (reverse concat)', () => {
   expect(createVMAndRunCode(`"one" "two" rconcat`).stack).toEqual(["onetwo"]);
   expect(createVMAndRunCode(`"1" "two" rconcat`).stack).toEqual(["1two"]);
+  expect(createVMAndRunCode(`1 2 rconcat`).stack).toEqual(["12"]);
+  expect(createVMAndRunCode(`"one" 2 rconcat`).stack).toEqual(["one2"]);
 });
 
 test('should pause', () => {
