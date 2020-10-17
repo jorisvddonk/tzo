@@ -30,10 +30,6 @@ Each item on the stack can either be a _number_ (floating point or integer), or 
 
 Each instruction in the program list (_either_ an opcode invocation, a string literal to be pushed onto the stack, or a number literal to be pushed onto the stack) takes up 1 space in the program list. The program list starts at 0.
 
-## Standard input and output
-
-By default, there is no standard input and output. Consider either using the stack as your standard input and output, or defining your own custom (foreign) opcodes for standard input and output (see below).
-
 # Opcodes
 
 The following section describes all opcodes from the standard runtime, which implementations are expected to implement. Note that it is also possible to push string or number literals onto the stack; this is not documented here as there is no associated opcode for that.
@@ -70,6 +66,7 @@ The following section describes all opcodes from the standard runtime, which imp
 | `delContext` | A                                        | string                       | Pops A off the stack, then deletes the value (and key / pointer, depending on implementation) pointed to by A completely, effectively freeing it.                                                                                                                                                                                                                                |
 | `goto`       | A                                        | string/number                | Pops A off the stack. If it is a number, sets the program counter to that value. If it is a string, looks up the string in the labelmap and sets the program counter to the value found in the label map                                                                                                                                                                         |
 | `stacksize`  |                                          |                              | Push the _current_ length of the stack to the stack itself. NOTE: the total length of the stack after this operation will be 1 _larger_ than the actual value!                                                                                                                                                                                                                   |
+| `stdout`     | A                                        | string/number                | Pops A off the stack. If number, converts it to string first. Then writes it on standard output.                                                                                                                                                                                                                                                                                 |
 
 ## Custom (Foreign) Opcodes
 

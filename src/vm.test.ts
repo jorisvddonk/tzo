@@ -1,5 +1,6 @@
 import { Context, Instruction, Tokenizer, VM } from ".";
 import { LabelMap } from "./interfaces";
+import { mockProcessStdout } from "jest-mock-process";
 
 function createVMAndRunStdRepCode(instructions: Instruction[], initialContext?: Context, initialLabelMap?: LabelMap) {
   if (initialLabelMap === undefined) {
@@ -309,4 +310,13 @@ test('poor man\'s function', () => {
 `);
   expect(vm.stack).toEqual([3, 6, 9, 12]);
   expect(JSON.stringify(vm.context)).toEqual("{}");
+});
+
+test('stdout', () => {
+  const stdOut = mockProcessStdout();
+  expect(createVMAndRunCode(`1 stdout`).stack).toEqual([]);
+  expect(stdOut).toHaveBeenCalledWith('1');
+  expect(createVMAndRunCode(`"hello" stdout`).stack).toEqual([]);
+  expect(stdOut).toHaveBeenCalledWith('hello');
+  stdOut.mockRestore();
 });

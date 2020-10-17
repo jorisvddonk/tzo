@@ -28,6 +28,7 @@ import randInt from "./opcodes/randInt";
 import rconcat from "./opcodes/rconcat";
 import setContext from "./opcodes/setContext";
 import stacksize from "./opcodes/stacksize";
+import stdout from "./opcodes/stdout";
 
 export const std_functions: Functions = {
   "randInt": randInt,
@@ -60,7 +61,8 @@ export const std_functions: Functions = {
   "or": or,
   "dup": dup,
   "pop": pop,
-  "stacksize": stacksize
+  "stacksize": stacksize,
+  "stdout": stdout,
 }
 
 export class VM {
