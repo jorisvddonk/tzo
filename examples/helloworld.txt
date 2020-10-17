@@ -1,1 +1,1 @@
-"Hello" "," " world" rconcat rconcat
+"Hello" "," " world" rconcat rconcat stdout
