@@ -1,24 +1,30 @@
 {
   "name": "tzo",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A simple Stack-based Virtual Machine",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",
-    "build": "rimraf ./dist && tsc"
+    "build": "rimraf ./dist && tsc",
+    "start": "ts-node src/cli.ts"
+  },
+  "bin": {
+    "tzo": "./bin/tzo"
   },
   "author": "Joris van de Donk <jorisvddonk@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@types/unist": "^2.0.3",
+    "commander": "^6.1.0",
     "debug": "^4.2.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.3",
     "unist-builder": "^2.0.3"
   },
   "devDependencies": {
+    "@types/commander": "^2.12.2",
     "@types/jest": "^26.0.14",
     "jest": "^26.4.2",
     "jest-mock-process": "^1.4.0",

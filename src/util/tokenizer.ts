@@ -75,7 +75,7 @@ export class Tokenizer {
 
   transform(tokens: string[]) {
     /**
-     * Parse a list of tokens into a list of Instructions and a LabelMap
+     * Parse a list of tokens into a list of Instructions
      */
     const labelMap: LabelMap = {};
     let i = -1;
