@@ -1,5 +1,5 @@
 import { Context, Instruction, Tokenizer, VM } from ".";
-import { LabelMap } from "./interfaces";
+import { LabelMap, Stack } from "./interfaces";
 import { mockProcessStdout } from "jest-mock-process";
 
 function createVMAndRunStdRepCode(instructions: Instruction[], initialContext?: Context, initialLabelMap?: LabelMap) {
@@ -12,7 +12,7 @@ function createVMAndRunStdRepCode(instructions: Instruction[], initialContext?: 
   return vm;
 }
 
-function createVMAndRunCode(codeBlock: string, initialContext?: Context, initialLabelMap?: LabelMap) {
+function createVM(codeBlock: string, initialContext?: Context, initialLabelMap?: LabelMap) {
   if (initialLabelMap === undefined) {
     initialLabelMap = {};
   }
@@ -20,8 +20,19 @@ function createVMAndRunCode(codeBlock: string, initialContext?: Context, initial
   const tokenizer = new Tokenizer();
   const instructions = tokenizer.transform(tokenizer.tokenize(codeBlock));
   vm.loadProgramList(instructions, initialLabelMap);
+  return vm;
+}
+
+function createVMAndRunCode(codeBlock: string, initialContext?: Context, initialLabelMap?: LabelMap) {
+  const vm = createVM(codeBlock, initialContext, initialLabelMap);
   vm.run();
   return vm;
+}
+
+function expectStack(codeBlock: string, expectedStack: Stack) {
+  const vm = createVM(codeBlock);
+  vm.run();
+  expect(vm.stack).toEqual(expectedStack);
 }
 
 test('should have an initial state', () => {
@@ -36,12 +47,12 @@ test('should have an initial state', () => {
 });
 
 test('should push numbers to the stack', () => {
-  expect(createVMAndRunCode(`1 2 3`).stack).toEqual([1, 2, 3]);
-  expect(createVMAndRunCode(`-1 -2 -3`).stack).toEqual([-1, -2, -3]);
+  expectStack(`1 2 3`, [1, 2, 3]);
+  expectStack(`-1 -2 -3`, [-1, -2, -3]);
 });
 
 test('should push strings to the stack', () => {
-  expect(createVMAndRunCode(`"foo" "bar" "baz"`).stack).toEqual(["foo", "bar", "baz"]);
+  expectStack(`"foo" "bar" "baz"`, ["foo", "bar", "baz"]);
 });
 
 test('should set context', () => {
@@ -67,92 +78,92 @@ test('should throw an error when trying to get context for unknown variables', (
 });
 
 test('should add numbers', () => {
-  expect(createVMAndRunCode(`1 2 +`).stack).toEqual([3]);
-  expect(createVMAndRunCode(`1 2 plus`).stack).toEqual([3]);
+  expectStack(`1 2 +`, [3]);
+  expectStack(`1 2 plus`, [3]);
 });
 
 test('should subtract numbers', () => {
-  expect(createVMAndRunCode(`1 2 -`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`1 2 min`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`1 10 min`).stack).toEqual([9]);
+  expectStack(`1 2 -`, [1]);
+  expectStack(`1 2 min`, [1]);
+  expectStack(`1 10 min`, [9]);
 });
 
 test('should multiply numbers', () => {
-  expect(createVMAndRunCode(`2 3 *`).stack).toEqual([6]);
-  expect(createVMAndRunCode(`2 3 mul`).stack).toEqual([6]);
+  expectStack(`2 3 *`, [6]);
+  expectStack(`2 3 mul`, [6]);
 });
 
 test('should support the not instruction', () => {
-  expect(createVMAndRunCode(`0 not`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`1 not`).stack).toEqual([0]);
-  expect(createVMAndRunCode(`42 not`).stack).toEqual([0]);
+  expectStack(`0 not`, [1]);
+  expectStack(`1 not`, [0]);
+  expectStack(`42 not`, [0]);
 });
 
 test('should support jgz, { and } for jgz-style if statements', () => {
-  expect(createVMAndRunCode(`1 jgz { "EXPECT_THIS" } "AND_THIS"`).stack).toEqual(["EXPECT_THIS", "AND_THIS"]);
-  expect(createVMAndRunCode(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`).stack).toEqual(["EXPECT_ONLY_THIS"]);
+  expectStack(`1 jgz { "EXPECT_THIS" } "AND_THIS"`, ["EXPECT_THIS", "AND_THIS"]);
+  expectStack(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`, ["EXPECT_ONLY_THIS"]);
 });
 
 test('should support jz', () => {
-  expect(createVMAndRunCode(`0 jz "no"`).stack).toEqual([]);
-  expect(createVMAndRunCode(`1 jz "yes"`).stack).toEqual(["yes"]);
-  expect(createVMAndRunCode(`-1 jz "yes"`).stack).toEqual(["yes"]);
+  expectStack(`0 jz "no"`, []);
+  expectStack(`1 jz "yes"`, ["yes"]);
+  expectStack(`-1 jz "yes"`, ["yes"]);
 });
 
 test('should support jgz', () => {
-  expect(createVMAndRunCode(`0 jgz "yes"`).stack).toEqual(["yes"]);
-  expect(createVMAndRunCode(`-1 jgz "yes"`).stack).toEqual(["yes"]);
-  expect(createVMAndRunCode(`1 jgz "no"`).stack).toEqual([]);
+  expectStack(`0 jgz "yes"`, ["yes"]);
+  expectStack(`-1 jgz "yes"`, ["yes"]);
+  expectStack(`1 jgz "no"`, []);
 });
 
 
 test('should support braces', () => {
-  expect(createVMAndRunCode(`1 2 { 3 4 5 } 6 7`).stack).toEqual([1, 2, 6, 7]);
+  expectStack(`1 2 { 3 4 5 } 6 7`, [1, 2, 6, 7]);
 });
 
 test('should support nested braces', () => {
-  expect(createVMAndRunCode(`1 2 { 3 { 4 5 } 6 } 7`).stack).toEqual([1, 2, 7]);
+  expectStack(`1 2 { 3 { 4 5 } 6 } 7`, [1, 2, 7]);
 })
 
 test('should support the goto instruction', () => {
-  expect(createVMAndRunCode(`5 goto "foo" "bar" "baz" "quux" exit`).stack).toEqual(["quux"]);
+  expectStack(`5 goto "foo" "bar" "baz" "quux" exit`, ["quux"]);
   expect(createVMAndRunCode(`"myLabel" goto "foo" "bar" "baz" "quux" exit`, {}, { myLabel: 5 }).stack).toEqual(["quux"]);
 });
 
 test('should calculate equality between values on the stack', () => {
-  expect(createVMAndRunCode(`1 1 eq`).stack).toEqual([1]); // equal
-  expect(createVMAndRunCode(`0 0 eq`).stack).toEqual([1]); // equal
-  expect(createVMAndRunCode(`"foo" "foo" eq`).stack).toEqual([1]); // equal
-  expect(createVMAndRunCode(`"foo" "bar" eq`).stack).toEqual([0]); // not equal
-  expect(createVMAndRunCode(`1 2 eq`).stack).toEqual([0]); // not equal
-  expect(createVMAndRunCode(`2 1 eq`).stack).toEqual([0]); // not equal
-  expect(createVMAndRunCode(`"0" 0 eq`).stack).toEqual([0]); // not equal
+  expectStack(`1 1 eq`, [1]); // equal
+  expectStack(`0 0 eq`, [1]); // equal
+  expectStack(`"foo" "foo" eq`, [1]); // equal
+  expectStack(`"foo" "bar" eq`, [0]); // not equal
+  expectStack(`1 2 eq`, [0]); // not equal
+  expectStack(`2 1 eq`, [0]); // not equal
+  expectStack(`"0" 0 eq`, [0]); // not equal
 });
 
 test('should calculate greater than', () => {
-  expect(createVMAndRunCode(`1 1 gt`).stack).toEqual([0]); // not greater than
-  expect(createVMAndRunCode(`1 0 gt`).stack).toEqual([0]); // not greater than
-  expect(createVMAndRunCode(`1 2 gt`).stack).toEqual([1]); // greater than
+  expectStack(`1 1 gt`, [0]); // not greater than
+  expectStack(`1 0 gt`, [0]); // not greater than
+  expectStack(`1 2 gt`, [1]); // greater than
 });
 
 test('should calculate less than', () => {
-  expect(createVMAndRunCode(`1 1 lt`).stack).toEqual([0]); // not less than
-  expect(createVMAndRunCode(`1 2 lt`).stack).toEqual([0]); // not less than
-  expect(createVMAndRunCode(`1 0 lt`).stack).toEqual([1]); // less than
+  expectStack(`1 1 lt`, [0]); // not less than
+  expectStack(`1 2 lt`, [0]); // not less than
+  expectStack(`1 0 lt`, [1]); // less than
 });
 
 test('should concat', () => {
-  expect(createVMAndRunCode(`"one" "two" concat`).stack).toEqual(["twoone"]);
-  expect(createVMAndRunCode(`"1" "two" concat`).stack).toEqual(["two1"]);
-  expect(createVMAndRunCode(`1 2 concat`).stack).toEqual(["21"]);
-  expect(createVMAndRunCode(`"one" 2 concat`).stack).toEqual(["2one"]);
+  expectStack(`"one" "two" concat`, ["twoone"]);
+  expectStack(`"1" "two" concat`, ["two1"]);
+  expectStack(`1 2 concat`, ["21"]);
+  expectStack(`"one" 2 concat`, ["2one"]);
 });
 
 test('should rconcat (reverse concat)', () => {
-  expect(createVMAndRunCode(`"one" "two" rconcat`).stack).toEqual(["onetwo"]);
-  expect(createVMAndRunCode(`"1" "two" rconcat`).stack).toEqual(["1two"]);
-  expect(createVMAndRunCode(`1 2 rconcat`).stack).toEqual(["12"]);
-  expect(createVMAndRunCode(`"one" 2 rconcat`).stack).toEqual(["one2"]);
+  expectStack(`"one" "two" rconcat`, ["onetwo"]);
+  expectStack(`"1" "two" rconcat`, ["1two"]);
+  expectStack(`1 2 rconcat`, ["12"]);
+  expectStack(`"one" 2 rconcat`, ["one2"]);
 });
 
 test('should pause', () => {
@@ -193,35 +204,35 @@ test('should do nothing on nop instruction', () => {
 });
 
 test('should calculate and', () => {
-  expect(createVMAndRunCode(`1 1 and`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`1 0 and`).stack).toEqual([0]);
-  expect(createVMAndRunCode(`0 1 and`).stack).toEqual([0]);
-  expect(createVMAndRunCode(`0 0 and`).stack).toEqual([0]);
-  expect(createVMAndRunCode(`1 9 and`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`9 1 and`).stack).toEqual([1]);
+  expectStack(`1 1 and`, [1]);
+  expectStack(`1 0 and`, [0]);
+  expectStack(`0 1 and`, [0]);
+  expectStack(`0 0 and`, [0]);
+  expectStack(`1 9 and`, [1]);
+  expectStack(`9 1 and`, [1]);
 });
 
 test('should calculate or', () => {
-  expect(createVMAndRunCode(`1 1 or`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`1 0 or`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`0 1 or`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`0 0 or`).stack).toEqual([0]);
-  expect(createVMAndRunCode(`1 9 or`).stack).toEqual([1]);
-  expect(createVMAndRunCode(`9 1 or`).stack).toEqual([1]);
+  expectStack(`1 1 or`, [1]);
+  expectStack(`1 0 or`, [1]);
+  expectStack(`0 1 or`, [1]);
+  expectStack(`0 0 or`, [0]);
+  expectStack(`1 9 or`, [1]);
+  expectStack(`9 1 or`, [1]);
 });
 
 test('should duplicate top item from stack via dup', () => {
-  expect(createVMAndRunCode(`1 dup`).stack).toEqual([1, 1]);
-  expect(createVMAndRunCode(`0 dup`).stack).toEqual([0, 0]);
-  expect(createVMAndRunCode(`"test" dup`).stack).toEqual(["test", "test"]);
-  expect(createVMAndRunCode(`42 dup`).stack).toEqual([42, 42]);
+  expectStack(`1 dup`, [1, 1]);
+  expectStack(`0 dup`, [0, 0]);
+  expectStack(`"test" dup`, ["test", "test"]);
+  expectStack(`42 dup`, [42, 42]);
 });
 
 test('should pop top item from stack via pop', () => {
-  expect(createVMAndRunCode(`1 pop`).stack).toEqual([]);
-  expect(createVMAndRunCode(`0 pop`).stack).toEqual([]);
-  expect(createVMAndRunCode(`"test" pop`).stack).toEqual([]);
-  expect(createVMAndRunCode(`1 2 3 pop`).stack).toEqual([1, 2]);
+  expectStack(`1 pop`, []);
+  expectStack(`0 pop`, []);
+  expectStack(`"test" pop`, []);
+  expectStack(`1 2 3 pop`, [1, 2]);
 });
 
 test('should support labels via tokenizer', () => {
