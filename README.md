@@ -268,3 +268,12 @@ To invoke this "function", push its argument on the stack and then call `ppc "mu
 3 ppc "mul3" goto
 4 ppc "mul3" goto
 ```
+
+# CLI
+
+There is a CLI available for Tzo, which is capable of interpreting either Standard Representation or ConciseText Tzo vm code. To invoke it:
+
+```bash
+npx tzo -i <path to .txt or .json file>
+```
+
