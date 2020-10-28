@@ -193,12 +193,12 @@ test('should exit', () => {
 });
 
 test('should push program counter on ppc instruction', () => {
-  expect(createVMAndRunCode(`nop nop ppc`).stack).toEqual([2]);
-  expect(createVMAndRunCode(`ppc`).stack).toEqual([0]);
+  expectStack(`nop nop ppc`, [2]);
+  expectStack(`ppc`, [0]);
 });
 
 test('should do nothing on nop instruction', () => {
-  expect(createVMAndRunCode(`nop nop nop`).stack).toEqual([]);
+  expectStack(`nop nop nop`, []);
   expect(createVMAndRunCode(`nop`).programCounter).toEqual(1);
   expect(createVMAndRunCode(`nop`).context).toEqual({});
 });
@@ -242,8 +242,8 @@ test('should support labels via tokenizer', () => {
 });
 
 test('should support the`stacksize opcode', () => {
-  expect(createVMAndRunCode(`"f" "o" "o" stacksize`).stack).toEqual(["f", "o", "o", 3]);
-  expect(createVMAndRunCode(`stacksize`).stack).toEqual([0]);
+  expectStack(`"f" "o" "o" stacksize`, ["f", "o", "o", 3]);
+  expectStack(`stacksize`, [0]);
 });
 
 test('should support Standard Representation code', () => {
@@ -303,11 +303,11 @@ test('should support labels in Standard Representation code', () => {
 });
 
 test('example tests', () => {
-  expect(createVMAndRunCode(`1 1 + 2 eq jgz { "1 + 1 = 2!" }`).stack).toEqual(["1 + 1 = 2!"]);
-  expect(createVMAndRunCode(`1 1 + 2 eq dup jgz { "1 + 1 = 2!" pop } jz { "1 + 1 is not 2!?" }`).stack).toEqual([]);
-  expect(createVMAndRunCode(`1 1 + 2 eq "conditionResult" setContext "conditionResult" getContext jgz { "1 + 1 = 2!" } "conditionResult" getContext jz { "1 + 1 is not 2!?" }`).stack).toEqual(["1 + 1 = 2!"]);
-  expect(createVMAndRunCode(`"Hello" "," " world!" rconcat rconcat`).stack).toEqual(["Hello, world!"]);
-  expect(createVMAndRunCode(`1 2 3 4 "hi" 0 -1 0 0 1 1 stacksize jgz { pop } stacksize jgz { 9 ppc - goto }`).stack).toEqual([]);
+  expectStack(`1 1 + 2 eq jgz { "1 + 1 = 2!" }`, ["1 + 1 = 2!"]);
+  expectStack(`1 1 + 2 eq dup jgz { "1 + 1 = 2!" pop } jz { "1 + 1 is not 2!?" }`, []);
+  expectStack(`1 1 + 2 eq "conditionResult" setContext "conditionResult" getContext jgz { "1 + 1 = 2!" } "conditionResult" getContext jz { "1 + 1 is not 2!?" }`, ["1 + 1 = 2!"]);
+  expectStack(`"Hello" "," " world!" rconcat rconcat`, ["Hello, world!"]);
+  expectStack(`1 2 3 4 "hi" 0 -1 0 0 1 1 stacksize jgz { pop } stacksize jgz { 9 ppc - goto }`, []);
 });
 
 test('poor man\'s function', () => {
@@ -329,9 +329,9 @@ test('poor man\'s function', () => {
 
 test('stdout', () => {
   const stdOut = mockProcessStdout();
-  expect(createVMAndRunCode(`1 stdout`).stack).toEqual([]);
+  expectStack(`1 stdout`, []);
   expect(stdOut).toHaveBeenCalledWith('1');
-  expect(createVMAndRunCode(`"hello" stdout`).stack).toEqual([]);
+  expectStack(`"hello" stdout`, []);
   expect(stdOut).toHaveBeenCalledWith('hello');
   stdOut.mockRestore();
 });
