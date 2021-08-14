@@ -3,12 +3,11 @@ import { LabelMap, Stack } from "./interfaces";
 import { mockProcessStdout } from "jest-mock-process";
 import fs from "fs";
 
-const EMIT_TEST_JSONS = true; // set to true to emit test jsons in `src/tests`
+const EMIT_TEST_JSONS = false; // set to true to emit test jsons in `src/tests`
 
 if (EMIT_TEST_JSONS) {
   // clean folder first!
   const files = fs.readdirSync("./src/tests");
-  console.log(files);
   files.forEach(f => {
     fs.unlinkSync(`./src/tests/${f}`);
   });
