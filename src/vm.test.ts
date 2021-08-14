@@ -1,6 +1,24 @@
 import { Context, Instruction, Tokenizer, VM } from ".";
 import { LabelMap, Stack } from "./interfaces";
 import { mockProcessStdout } from "jest-mock-process";
+import fs from "fs";
+
+const EMIT_TEST_JSONS = true; // set to true to emit test jsons in `src/tests`
+
+if (EMIT_TEST_JSONS) {
+  // clean folder first!
+  const files = fs.readdirSync("./src/tests");
+  console.log(files);
+  files.forEach(f => {
+    fs.unlinkSync(`./src/tests/${f}`);
+  });
+}
+
+interface Expectations {
+  stack?: Array<any>,
+  context?: Context,
+  programCounter?: number
+}
 
 function createVMAndRunStdRepCode(instructions: Instruction[], initialContext?: Context, initialLabelMap?: LabelMap) {
   if (initialLabelMap === undefined) {
@@ -20,19 +38,50 @@ function createVM(codeBlock: string, initialContext?: Context, initialLabelMap?:
   const tokenizer = new Tokenizer();
   const instructions = tokenizer.transform(tokenizer.tokenize(codeBlock));
   vm.loadProgramList(instructions, initialLabelMap);
-  return vm;
+  return { vm, instructions };
 }
 
 function createVMAndRunCode(codeBlock: string, initialContext?: Context, initialLabelMap?: LabelMap) {
-  const vm = createVM(codeBlock, initialContext, initialLabelMap);
+  const { vm } = createVM(codeBlock, initialContext, initialLabelMap);
   vm.run();
   return vm;
 }
 
-function expectStack(codeBlock: string, expectedStack: Stack) {
-  const vm = createVM(codeBlock);
+let lastTest = 0;
+function expectVM(codeBlock: string, initialContext: Context, expectations: Expectations, testname?: String) {
+  const { instructions, vm } = createVM(codeBlock, initialContext);
+  let usedTestName = testname;
+  if (testname === undefined) {
+    usedTestName = "" + lastTest;
+    lastTest += 1;
+  }
+  if (EMIT_TEST_JSONS) {
+    fs.writeFileSync(`./src/tests/${usedTestName}.json`, JSON.stringify({
+      input_program: instructions,
+      initial_context: initialContext,
+      expected: {
+        stack: expectations.stack,
+        context: expectations.context,
+        programCounter: expectations.programCounter
+      }
+    }, null, 2));
+  }
   vm.run();
-  expect(vm.stack).toEqual(expectedStack);
+  if (expectations.stack !== undefined) {
+    expect(vm.stack).toEqual(expectations.stack);
+  }
+  if (expectations.context !== undefined) {
+    expect(vm.context).toEqual(expectations.context)
+  }
+  if (expectations.programCounter !== undefined) {
+    expect(vm.programCounter).toEqual(expectations.programCounter)
+  }
+}
+
+function expectStack(codeBlock: string, expectedStack: Stack, testname?: String) {
+  expectVM(codeBlock, {}, {
+    stack: expectedStack
+  }, testname);
 }
 
 test('should have an initial state', () => {
@@ -56,19 +105,19 @@ test('should push strings to the stack', () => {
 });
 
 test('should set context', () => {
-  expect(createVMAndRunCode(`"FOO" "bar" setContext`).context.bar).toBe("FOO");
-  expect(createVMAndRunCode(`1 "bar" setContext`).context.bar).toBe(1);
+  expectVM(`"FOO" "bar" setContext`, {}, { context: { bar: "FOO" } }, "setContext_string");
+  expectVM(`1 "bar" setContext`, {}, { context: { bar: 1 } }, "setContext_number");
 });
 
 test('should get context', () => {
   const ctx = { "ham": "ster", "one": 1, "two": 2 };
-  expect(createVMAndRunCode(`"ham" getContext`, ctx).stack).toEqual(["ster"]);
-  expect(createVMAndRunCode(`"one" getContext`, ctx).stack).toEqual([1]);
+  expectVM(`"ham" getContext`, ctx, { stack: ["ster"] }, "getContext_1");
+  expectVM(`"one" getContext`, ctx, { stack: [1] }, "getContext_2");
+  expectVM(`"two" getContext`, ctx, { stack: [2] }, "getContext_3");
 });
 
 test('should delete context', () => {
-  expect(createVMAndRunCode(`"FOO" "bar" setContext "bar" delContext`).context.bar).toBe(undefined);
-  expect(JSON.stringify(createVMAndRunCode(`"FOO" "bar" setContext "bar" delContext`).context)).toBe("{}");
+  expectVM(`"FOO" "bar" setContext "bar" delContext`, {}, { context: {} }, "delContext");
 });
 
 
@@ -126,7 +175,8 @@ test('should support nested braces', () => {
 })
 
 test('should support the goto instruction', () => {
-  expectStack(`5 goto "foo" "bar" "baz" "quux" exit`, ["quux"]);
+  expectStack(`5 goto "foo" "bar" "baz" "quux" exit`, ["quux"], "goto_by_number");
+  expectStack(`"myLabel" goto "foo" "bar" "baz" "quux" #myLabel exit`, ["quux"], "goto_by_label");
   expect(createVMAndRunCode(`"myLabel" goto "foo" "bar" "baz" "quux" exit`, {}, { myLabel: 5 }).stack).toEqual(["quux"]);
 });
 
@@ -199,8 +249,8 @@ test('should push program counter on ppc instruction', () => {
 
 test('should do nothing on nop instruction', () => {
   expectStack(`nop nop nop`, []);
-  expect(createVMAndRunCode(`nop`).programCounter).toEqual(1);
-  expect(createVMAndRunCode(`nop`).context).toEqual({});
+  expectVM(`nop`, {}, { programCounter: 1 });
+  expectVM(`nop`, {}, { context: {} });
 });
 
 test('should calculate and', () => {
