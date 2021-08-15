@@ -370,20 +370,21 @@ test('example tests', () => {
 });
 
 test('poor man\'s function', () => {
-  const vm = createVMAndRunCode(`
-{
-  nop #mul3
-  "_mul3_return_pc" setContext
-  3 *
-  "_mul3_return_pc" getContext 3 + "_mul3_return_pc" delContext goto
-}
-1 ppc "mul3" goto
-2 ppc "mul3" goto
-3 ppc "mul3" goto
-4 ppc "mul3" goto
-`);
-  expect(vm.stack).toEqual([3, 6, 9, 12]);
-  expect(JSON.stringify(vm.context)).toEqual("{}");
+  expectVM(`
+    {
+      nop #mul3
+      "_mul3_return_pc" setContext
+      3 *
+      "_mul3_return_pc" getContext 3 + "_mul3_return_pc" delContext goto
+    }
+    1 ppc "mul3" goto
+    2 ppc "mul3" goto
+    3 ppc "mul3" goto
+    4 ppc "mul3" goto
+    `, {}, {
+    stack: [3, 6, 9, 12],
+    context: {}
+  }, 'poor_mans_function');
 });
 
 test('stdout', () => {
