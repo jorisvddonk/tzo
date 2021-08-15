@@ -1,19 +1,14 @@
 {
   "input_program": [
     {
-      "type": "push-number-instruction",
-      "value": 42
-    },
-    {
       "type": "invoke-function-instruction",
-      "functionName": "dup"
+      "functionName": "stacksize"
     }
   ],
   "initial_context": {},
   "expected": {
     "stack": [
-      42,
-      42
+      0
     ]
   }
 }

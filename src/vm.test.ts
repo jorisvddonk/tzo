@@ -190,15 +190,25 @@ test('should calculate equality between values on the stack', () => {
 });
 
 test('should calculate greater than', () => {
-  expectStack(`1 1 gt`, [0]); // not greater than
-  expectStack(`1 0 gt`, [0]); // not greater than
-  expectStack(`1 2 gt`, [1]); // greater than
+  expectStack(`1 1 gt`, [0], 'gt_0'); // not greater than
+  expectStack(`1 0 gt`, [0], 'gt_1'); // not greater than
+  expectStack(`1 2 gt`, [1], 'gt_2'); // greater than
+  expectStack(`1 -2 gt`, [0], 'gt_3'); // not greater than
+  expectStack(`-1 2 gt`, [1], 'gt_4'); // greater than
+  expectStack(`-1 -2 gt`, [0], 'gt_5'); // not greater than
+  expectStack(`-2 -1 gt`, [1], 'gt_6'); // greater than
+  expectStack(`-2 -2 gt`, [0], 'gt_7'); // not greater than
 });
 
 test('should calculate less than', () => {
-  expectStack(`1 1 lt`, [0]); // not less than
-  expectStack(`1 2 lt`, [0]); // not less than
-  expectStack(`1 0 lt`, [1]); // less than
+  expectStack(`1 1 lt`, [0], 'lt_0'); // not less than
+  expectStack(`1 2 lt`, [0], 'lt_1'); // not less than
+  expectStack(`1 0 lt`, [1], 'lt_2'); // less than
+  expectStack(`1 -1 lt`, [1], 'lt_3'); // less than
+  expectStack(`-1 -1 lt`, [0], 'lt_4'); // not less than
+  expectStack(`-1 -2 lt`, [1], 'lt_5'); // not less than
+  expectStack(`-1 2 lt`, [0], 'lt_6'); // not less than
+  expectStack(`2 -1 lt`, [1], 'lt_7'); // not less than
 });
 
 test('should concat', () => {

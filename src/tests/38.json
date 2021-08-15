@@ -1,22 +1,22 @@
 {
   "input_program": [
     {
-      "type": "push-number-instruction",
-      "value": 1
-    },
-    {
-      "type": "push-number-instruction",
-      "value": 2
+      "type": "invoke-function-instruction",
+      "functionName": "nop"
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "concat"
+      "functionName": "nop"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "ppc"
     }
   ],
   "initial_context": {},
   "expected": {
     "stack": [
-      "21"
+      2
     ]
   }
 }

@@ -2,21 +2,15 @@
   "input_program": [
     {
       "type": "push-number-instruction",
-      "value": 9
-    },
-    {
-      "type": "push-number-instruction",
-      "value": 1
+      "value": 0
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "or"
+      "functionName": "pop"
     }
   ],
   "initial_context": {},
   "expected": {
-    "stack": [
-      1
-    ]
+    "stack": []
   }
 }

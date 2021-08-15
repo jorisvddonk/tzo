@@ -1,20 +1,22 @@
 {
   "input_program": [
     {
-      "type": "invoke-function-instruction",
-      "functionName": "nop"
+      "type": "push-number-instruction",
+      "value": 0
+    },
+    {
+      "type": "push-number-instruction",
+      "value": 0
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "nop"
-    },
-    {
-      "type": "invoke-function-instruction",
-      "functionName": "nop"
+      "functionName": "and"
     }
   ],
   "initial_context": {},
   "expected": {
-    "stack": []
+    "stack": [
+      0
+    ]
   }
 }

@@ -2,21 +2,18 @@
   "input_program": [
     {
       "type": "push-number-instruction",
-      "value": 0
-    },
-    {
-      "type": "push-number-instruction",
-      "value": 0
+      "value": 42
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "or"
+      "functionName": "dup"
     }
   ],
   "initial_context": {},
   "expected": {
     "stack": [
-      0
+      42,
+      42
     ]
   }
 }

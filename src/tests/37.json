@@ -2,21 +2,21 @@
   "input_program": [
     {
       "type": "push-string-instruction",
-      "value": "1"
+      "value": "one"
     },
     {
-      "type": "push-string-instruction",
-      "value": "two"
+      "type": "push-number-instruction",
+      "value": 2
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "concat"
+      "functionName": "rconcat"
     }
   ],
   "initial_context": {},
   "expected": {
     "stack": [
-      "two1"
+      "one2"
     ]
   }
 }

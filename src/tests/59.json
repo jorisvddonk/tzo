@@ -5,18 +5,12 @@
       "value": 1
     },
     {
-      "type": "push-number-instruction",
-      "value": 9
-    },
-    {
       "type": "invoke-function-instruction",
-      "functionName": "or"
+      "functionName": "pop"
     }
   ],
   "initial_context": {},
   "expected": {
-    "stack": [
-      1
-    ]
+    "stack": []
   }
 }

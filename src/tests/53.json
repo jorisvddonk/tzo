@@ -10,7 +10,7 @@
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "and"
+      "functionName": "or"
     }
   ],
   "initial_context": {},

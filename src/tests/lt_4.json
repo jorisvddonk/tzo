@@ -2,15 +2,21 @@
   "input_program": [
     {
       "type": "push-number-instruction",
-      "value": 1
+      "value": -1
+    },
+    {
+      "type": "push-number-instruction",
+      "value": -1
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "stdout"
+      "functionName": "lt"
     }
   ],
   "initial_context": {},
   "expected": {
-    "stack": []
+    "stack": [
+      0
+    ]
   }
 }

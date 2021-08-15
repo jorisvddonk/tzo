@@ -10,13 +10,13 @@
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "gt"
+      "functionName": "concat"
     }
   ],
   "initial_context": {},
   "expected": {
     "stack": [
-      1
+      "21"
     ]
   }
 }

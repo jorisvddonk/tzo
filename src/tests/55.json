@@ -5,17 +5,14 @@
       "value": 1
     },
     {
-      "type": "push-number-instruction",
-      "value": 1
-    },
-    {
       "type": "invoke-function-instruction",
-      "functionName": "or"
+      "functionName": "dup"
     }
   ],
   "initial_context": {},
   "expected": {
     "stack": [
+      1,
       1
     ]
   }

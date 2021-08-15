@@ -10,13 +10,13 @@
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "and"
+      "functionName": "or"
     }
   ],
   "initial_context": {},
   "expected": {
     "stack": [
-      0
+      1
     ]
   }
 }

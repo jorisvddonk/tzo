@@ -1,22 +1,20 @@
 {
   "input_program": [
     {
-      "type": "push-string-instruction",
-      "value": "one"
-    },
-    {
-      "type": "push-string-instruction",
-      "value": "two"
+      "type": "invoke-function-instruction",
+      "functionName": "nop"
     },
     {
       "type": "invoke-function-instruction",
-      "functionName": "rconcat"
+      "functionName": "nop"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "nop"
     }
   ],
   "initial_context": {},
   "expected": {
-    "stack": [
-      "onetwo"
-    ]
+    "stack": []
   }
 }
