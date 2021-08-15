@@ -3,7 +3,7 @@ import { LabelMap, Stack } from "./interfaces";
 import { mockProcessStdout } from "jest-mock-process";
 import fs from "fs";
 
-const EMIT_TEST_JSONS = false; // set to true to emit test jsons in `src/tests`
+const EMIT_TEST_JSONS = true; // set to true to emit test jsons in `src/tests`
 
 if (EMIT_TEST_JSONS) {
   // clean folder first!
@@ -47,7 +47,7 @@ function createVMAndRunCode(codeBlock: string, initialContext?: Context, initial
 }
 
 let lastTest = 0;
-function expectVM(codeBlock: string, initialContext: Context, expectations: Expectations, testname?: String) {
+function expectVM(codeBlock: string, initialContext: Context, expectations: Expectations, testname: String) {
   const { instructions, vm } = createVM(codeBlock, initialContext);
   let usedTestName = testname;
   if (testname === undefined) {
@@ -77,7 +77,7 @@ function expectVM(codeBlock: string, initialContext: Context, expectations: Expe
   }
 }
 
-function expectStack(codeBlock: string, expectedStack: Stack, testname?: String) {
+function expectStack(codeBlock: string, expectedStack: Stack, testname: String) {
   expectVM(codeBlock, {}, {
     stack: expectedStack
   }, testname);
@@ -95,12 +95,12 @@ test('should have an initial state', () => {
 });
 
 test('should push numbers to the stack', () => {
-  expectStack(`1 2 3`, [1, 2, 3]);
-  expectStack(`-1 -2 -3`, [-1, -2, -3]);
+  expectStack(`1 2 3`, [1, 2, 3], "push_numbers");
+  expectStack(`-1 -2 -3`, [-1, -2, -3], "push_negative_numbers");
 });
 
 test('should push strings to the stack', () => {
-  expectStack(`"foo" "bar" "baz"`, ["foo", "bar", "baz"]);
+  expectStack(`"foo" "bar" "baz"`, ["foo", "bar", "baz"], "push_strings");
 });
 
 test('should set context', () => {
@@ -126,51 +126,51 @@ test('should throw an error when trying to get context for unknown variables', (
 });
 
 test('should add numbers', () => {
-  expectStack(`1 2 +`, [3]);
-  expectStack(`1 2 plus`, [3]);
+  expectStack(`1 2 +`, [3], "plus_0");
+  expectStack(`1 2 plus`, [3], "plus_1");
 });
 
 test('should subtract numbers', () => {
-  expectStack(`1 2 -`, [1]);
-  expectStack(`1 2 min`, [1]);
-  expectStack(`1 10 min`, [9]);
+  expectStack(`1 2 -`, [1], "min_0");
+  expectStack(`1 2 min`, [1], "min_1");
+  expectStack(`1 10 min`, [9], "min_2");
 });
 
 test('should multiply numbers', () => {
-  expectStack(`2 3 *`, [6]);
-  expectStack(`2 3 mul`, [6]);
+  expectStack(`2 3 *`, [6], "multiply_0");
+  expectStack(`2 3 mul`, [6], "multiply_1");
 });
 
 test('should support the not instruction', () => {
-  expectStack(`0 not`, [1]);
-  expectStack(`1 not`, [0]);
-  expectStack(`42 not`, [0]);
+  expectStack(`0 not`, [1], "not_0");
+  expectStack(`1 not`, [0], "not_1");
+  expectStack(`42 not`, [0], "not_2");
 });
 
 test('should support jgz, { and } for jgz-style if statements', () => {
-  expectStack(`1 jgz { "EXPECT_THIS" } "AND_THIS"`, ["EXPECT_THIS", "AND_THIS"]);
-  expectStack(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`, ["EXPECT_ONLY_THIS"]);
+  expectStack(`1 jgz { "EXPECT_THIS" } "AND_THIS"`, ["EXPECT_THIS", "AND_THIS"], "if_jgz_0");
+  expectStack(`0 jgz { "EXPECT_NOT_THIS" } "EXPECT_ONLY_THIS"`, ["EXPECT_ONLY_THIS"], "if_jgz_1");
 });
 
 test('should support jz', () => {
-  expectStack(`0 jz "no"`, []);
-  expectStack(`1 jz "yes"`, ["yes"]);
-  expectStack(`-1 jz "yes"`, ["yes"]);
+  expectStack(`0 jz "no"`, [], "jz_0");
+  expectStack(`1 jz "yes"`, ["yes"], "jz_1");
+  expectStack(`-1 jz "yes"`, ["yes"], "jz_2");
 });
 
 test('should support jgz', () => {
-  expectStack(`0 jgz "yes"`, ["yes"]);
-  expectStack(`-1 jgz "yes"`, ["yes"]);
-  expectStack(`1 jgz "no"`, []);
+  expectStack(`0 jgz "yes"`, ["yes"], "jgz_0");
+  expectStack(`-1 jgz "yes"`, ["yes"], "jgz_1");
+  expectStack(`1 jgz "no"`, [], "jgz_2");
 });
 
 
 test('should support braces', () => {
-  expectStack(`1 2 { 3 4 5 } 6 7`, [1, 2, 6, 7]);
+  expectStack(`1 2 { 3 4 5 } 6 7`, [1, 2, 6, 7], "braces");
 });
 
 test('should support nested braces', () => {
-  expectStack(`1 2 { 3 { 4 5 } 6 } 7`, [1, 2, 7]);
+  expectStack(`1 2 { 3 { 4 5 } 6 } 7`, [1, 2, 7], "braces_nested");
 })
 
 test('should support the goto instruction', () => {
@@ -180,13 +180,13 @@ test('should support the goto instruction', () => {
 });
 
 test('should calculate equality between values on the stack', () => {
-  expectStack(`1 1 eq`, [1]); // equal
-  expectStack(`0 0 eq`, [1]); // equal
-  expectStack(`"foo" "foo" eq`, [1]); // equal
-  expectStack(`"foo" "bar" eq`, [0]); // not equal
-  expectStack(`1 2 eq`, [0]); // not equal
-  expectStack(`2 1 eq`, [0]); // not equal
-  expectStack(`"0" 0 eq`, [0]); // not equal
+  expectStack(`1 1 eq`, [1], "eq_0"); // equal
+  expectStack(`0 0 eq`, [1], "eq_1"); // equal
+  expectStack(`"foo" "foo" eq`, [1], "eq_2"); // equal
+  expectStack(`"foo" "bar" eq`, [0], "eq_3"); // not equal
+  expectStack(`1 2 eq`, [0], "eq_4"); // not equal
+  expectStack(`2 1 eq`, [0], "eq_5"); // not equal
+  expectStack(`"0" 0 eq`, [0], "eq_6"); // not equal
 });
 
 test('should calculate greater than', () => {
@@ -212,17 +212,17 @@ test('should calculate less than', () => {
 });
 
 test('should concat', () => {
-  expectStack(`"one" "two" concat`, ["twoone"]);
-  expectStack(`"1" "two" concat`, ["two1"]);
-  expectStack(`1 2 concat`, ["21"]);
-  expectStack(`"one" 2 concat`, ["2one"]);
+  expectStack(`"one" "two" concat`, ["twoone"], "concat_0");
+  expectStack(`"1" "two" concat`, ["two1"], "concat_1");
+  expectStack(`1 2 concat`, ["21"], "concat_2");
+  expectStack(`"one" 2 concat`, ["2one"], "concat_3");
 });
 
 test('should rconcat (reverse concat)', () => {
-  expectStack(`"one" "two" rconcat`, ["onetwo"]);
-  expectStack(`"1" "two" rconcat`, ["1two"]);
-  expectStack(`1 2 rconcat`, ["12"]);
-  expectStack(`"one" 2 rconcat`, ["one2"]);
+  expectStack(`"one" "two" rconcat`, ["onetwo"], "rconcat_0");
+  expectStack(`"1" "two" rconcat`, ["1two"], "rconcat_1");
+  expectStack(`1 2 rconcat`, ["12"], "rconcat_2");
+  expectStack(`"one" 2 rconcat`, ["one2"], "rconcat_3");
 });
 
 test('should pause', () => {
@@ -252,46 +252,45 @@ test('should exit', () => {
 });
 
 test('should push program counter on ppc instruction', () => {
-  expectStack(`nop nop ppc`, [2]);
-  expectStack(`ppc`, [0]);
+  expectStack(`nop nop ppc`, [2], "ppc_0");
+  expectStack(`ppc`, [0], "ppc_1");
 });
 
 test('should do nothing on nop instruction', () => {
-  expectStack(`nop nop nop`, []);
-  expectVM(`nop`, {}, { programCounter: 1 });
-  expectVM(`nop`, {}, { context: {} });
+  expectStack(`nop nop nop`, [], "nop_0");
+  expectVM(`nop`, {}, { programCounter: 1, context: {}, stack: [] }, "nop_1");
 });
 
 test('should calculate and', () => {
-  expectStack(`1 1 and`, [1]);
-  expectStack(`1 0 and`, [0]);
-  expectStack(`0 1 and`, [0]);
-  expectStack(`0 0 and`, [0]);
-  expectStack(`1 9 and`, [1]);
-  expectStack(`9 1 and`, [1]);
+  expectStack(`1 1 and`, [1], "and_0");
+  expectStack(`1 0 and`, [0], "and_1");
+  expectStack(`0 1 and`, [0], "and_2");
+  expectStack(`0 0 and`, [0], "and_3");
+  expectStack(`1 9 and`, [1], "and_4");
+  expectStack(`9 1 and`, [1], "and_5");
 });
 
 test('should calculate or', () => {
-  expectStack(`1 1 or`, [1]);
-  expectStack(`1 0 or`, [1]);
-  expectStack(`0 1 or`, [1]);
-  expectStack(`0 0 or`, [0]);
-  expectStack(`1 9 or`, [1]);
-  expectStack(`9 1 or`, [1]);
+  expectStack(`1 1 or`, [1], "or_0");
+  expectStack(`1 0 or`, [1], "or_1");
+  expectStack(`0 1 or`, [1], "or_2");
+  expectStack(`0 0 or`, [0], "or_3");
+  expectStack(`1 9 or`, [1], "or_4");
+  expectStack(`9 1 or`, [1], "or_5");
 });
 
 test('should duplicate top item from stack via dup', () => {
-  expectStack(`1 dup`, [1, 1]);
-  expectStack(`0 dup`, [0, 0]);
-  expectStack(`"test" dup`, ["test", "test"]);
-  expectStack(`42 dup`, [42, 42]);
+  expectStack(`1 dup`, [1, 1], "dup_0");
+  expectStack(`0 dup`, [0, 0], "dup_1");
+  expectStack(`"test" dup`, ["test", "test"], "dup_2");
+  expectStack(`42 dup`, [42, 42], "dup_3");
 });
 
 test('should pop top item from stack via pop', () => {
-  expectStack(`1 pop`, []);
-  expectStack(`0 pop`, []);
-  expectStack(`"test" pop`, []);
-  expectStack(`1 2 3 pop`, [1, 2]);
+  expectStack(`1 pop`, [], "pop_0");
+  expectStack(`0 pop`, [], "pop_1");
+  expectStack(`"test" pop`, [], "pop_2");
+  expectStack(`1 2 3 pop`, [1, 2], "pop_3");
 });
 
 test('should support labels via tokenizer', () => {
@@ -301,8 +300,8 @@ test('should support labels via tokenizer', () => {
 });
 
 test('should support the`stacksize opcode', () => {
-  expectStack(`"f" "o" "o" stacksize`, ["f", "o", "o", 3]);
-  expectStack(`stacksize`, [0]);
+  expectStack(`"f" "o" "o" stacksize`, ["f", "o", "o", 3], "stacksize_0");
+  expectStack(`stacksize`, [0], "stacksize_1");
 });
 
 test('should support Standard Representation code', () => {
@@ -362,11 +361,11 @@ test('should support labels in Standard Representation code', () => {
 });
 
 test('example tests', () => {
-  expectStack(`1 1 + 2 eq jgz { "1 + 1 = 2!" }`, ["1 + 1 = 2!"]);
-  expectStack(`1 1 + 2 eq dup jgz { "1 + 1 = 2!" pop } jz { "1 + 1 is not 2!?" }`, []);
-  expectStack(`1 1 + 2 eq "conditionResult" setContext "conditionResult" getContext jgz { "1 + 1 = 2!" } "conditionResult" getContext jz { "1 + 1 is not 2!?" }`, ["1 + 1 = 2!"]);
-  expectStack(`"Hello" "," " world!" rconcat rconcat`, ["Hello, world!"]);
-  expectStack(`1 2 3 4 "hi" 0 -1 0 0 1 1 stacksize jgz { pop } stacksize jgz { 9 ppc - goto }`, []);
+  expectStack(`1 1 + 2 eq jgz { "1 + 1 = 2!" }`, ["1 + 1 = 2!"], "example_0");
+  expectStack(`1 1 + 2 eq dup jgz { "1 + 1 = 2!" pop } jz { "1 + 1 is not 2!?" }`, [], "example_1");
+  expectStack(`1 1 + 2 eq "conditionResult" setContext "conditionResult" getContext jgz { "1 + 1 = 2!" } "conditionResult" getContext jz { "1 + 1 is not 2!?" }`, ["1 + 1 = 2!"], "example_2");
+  expectStack(`"Hello" "," " world!" rconcat rconcat`, ["Hello, world!"], "example_3");
+  expectStack(`1 2 3 4 "hi" 0 -1 0 0 1 1 stacksize jgz { pop } stacksize jgz { 9 ppc - goto }`, [], "example_4");
 });
 
 test('poor man\'s function', () => {
@@ -389,9 +388,9 @@ test('poor man\'s function', () => {
 
 test('stdout', () => {
   const stdOut = mockProcessStdout();
-  expectStack(`1 stdout`, []);
+  expectStack(`1 stdout`, [], "stdout_0");
   expect(stdOut).toHaveBeenCalledWith('1');
-  expectStack(`"hello" stdout`, []);
+  expectStack(`"hello" stdout`, [], "stdout_1");
   expect(stdOut).toHaveBeenCalledWith('hello');
   stdOut.mockRestore();
 });
