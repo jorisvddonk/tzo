@@ -115,6 +115,13 @@ test('should get context', () => {
   expectVM(`"two" getContext`, ctx, { stack: [2] }, "getContext_3");
 });
 
+test('should be able to text if context variable exists', () => {
+  const ctx = { "ham": "ster", "one": 1, "two": 2 };
+  expectVM(`"ham" hasContext`, ctx, { stack: [1] }, "hasContext_1");
+  expectVM(`"one" hasContext`, ctx, { stack: [1] }, "hasContext_2");
+  expectVM(`"foobar" hasContext`, ctx, { stack: [0] }, "hasContext_3");
+});
+
 test('should delete context', () => {
   expectVM(`"FOO" "bar" setContext "bar" delContext`, {}, { context: {} }, "delContext");
 });

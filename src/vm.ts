@@ -9,6 +9,7 @@ import dup from "./opcodes/dup";
 import eq from "./opcodes/eq";
 import exit from "./opcodes/exit";
 import getContext from "./opcodes/getContext";
+import hasContext from "./opcodes/hasContext";
 import goto from "./opcodes/goto";
 import gt from "./opcodes/gt";
 import jgz from "./opcodes/jgz";
@@ -43,6 +44,7 @@ export const std_functions: Functions = {
   "concat": concat,
   "rconcat": rconcat,
   "getContext": getContext,
+  "hasContext": hasContext,
   "setContext": setContext,
   "delContext": delContext,
   "gt": gt,
