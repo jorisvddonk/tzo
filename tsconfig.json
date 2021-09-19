@@ -2,7 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es6",
-    "module": "commonjs",
+    "module": "es2020",
     "lib": [
       "esnext"
     ],

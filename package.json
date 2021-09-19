@@ -30,5 +30,10 @@
     "jest-mock-process": "^1.4.0",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.0"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./vm": "./dist/vm.js",
+    "./getStackParams": "./dist/getStackParams.js"
   }
 }
