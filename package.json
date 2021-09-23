@@ -1,6 +1,6 @@
 {
   "name": "tzo",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A simple Stack-based Virtual Machine",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,8 +32,17 @@
     "ts-jest": "^26.4.0"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./vm": "./dist/vm.js",
-    "./getStackParams": "./dist/getStackParams.js"
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./vm": {
+      "import": "./dist/mjs/vm.js",
+      "require": "./dist/cjs/vm.js"
+    },
+    "./vgetStackParamsm": {
+      "import": "./dist/mjs/getStackParams.js",
+      "require": "./dist/cjs/getStackParams.js"
+    }
   }
 }
