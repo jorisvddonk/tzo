@@ -1,9 +1,9 @@
 {
   "name": "tzo",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "A simple Stack-based Virtual Machine",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/mjs/index.js",
+  "types": "dist/mjs/index.d.ts",
   "scripts": {
     "test": "jest",
     "prepublishOnly": "npm run build",
