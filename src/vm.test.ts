@@ -1,5 +1,5 @@
 import { Context, Instruction, Tokenizer, VM } from ".";
-import { LabelMap, Stack } from "./interfaces";
+import { LabelMap, Stack } from "./interfaces.js";
 import { mockProcessStdout } from "jest-mock-process";
 import fs from "fs";
 

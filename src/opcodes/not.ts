@@ -1,4 +1,6 @@
-import { Stack, Context, getStackParams, FunctionInvocationOperation } from "..";
+import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
+import { VM } from "../vm.js";
+import { getStackParams } from "../getStackParams.js";
 
 /**
  * not opcode: pop one element from the stack. If it is 0, push 1. Otherwise, push 0.

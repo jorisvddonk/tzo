@@ -1,6 +1,6 @@
 import u from "unist-builder";
-import { Instruction } from "../interfaces";
-import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../";
+import { Instruction } from "../interfaces.js";
+import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../index.js";
 
 const stringPushOperationRegexp = /^\"(.+)\"$/;
 const numberPushOperationRegexp = /^(-?[0-9]+)$/;

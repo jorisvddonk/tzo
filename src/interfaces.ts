@@ -1,4 +1,4 @@
-import { VM } from "./vm";
+import { VM } from "./vm.js";
 
 export type instructiontype = "push-number-instruction" | "push-string-instruction" | "invoke-function-instruction";
 export type BaseInstruction<T extends instructiontype> = {

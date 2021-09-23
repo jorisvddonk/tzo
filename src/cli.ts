@@ -1,6 +1,8 @@
 import fs from "fs";
 import program from "commander";
-import { VM, TzoVMState, Tokenizer } from ".";
+import { VM } from "./vm.js";
+import { Tokenizer } from "./util/tokenizer.js";
+import { TzoVMState } from "./interfaces.js";
 
 program
   .version('1.0.8')

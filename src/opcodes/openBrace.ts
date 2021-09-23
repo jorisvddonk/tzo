@@ -1,4 +1,6 @@
-import { Stack, Context, getStackParams, VM, FunctionInvocationOperation } from "..";
+import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
+import { VM } from "../vm.js";
+import { getStackParams } from "../getStackParams.js";
 
 const openBrace: FunctionInvocationOperation = (stack: Stack, context: Context, vm: VM) => { // jump to matching brace (source)
   let i = 0;

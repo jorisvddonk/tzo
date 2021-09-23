@@ -1,4 +1,4 @@
-import { Stack } from "./interfaces";
+import { Stack } from "./interfaces.js";
 
 
 export function getStackParams(functionName: string, paramTypes: Array<"string" | "number" | "string | number">, stack: Stack) {

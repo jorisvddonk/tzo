@@ -1,4 +1,5 @@
-import { Stack, Context, getStackParams, FunctionInvocationOperation } from "..";
+import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
+import { getStackParams } from "../getStackParams.js";
 
 /**
  * Pop the top item from the stack, then push it twice, effectively duplicating it. 
