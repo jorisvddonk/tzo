@@ -2,30 +2,30 @@
 // Generated from src/grammars/ConciseText.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
-import { ATN } from "antlr4ts/atn/ATN";
-import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
-import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { NotNull } from "antlr4ts/Decorators";
-import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { Override } from "antlr4ts/Decorators";
-import { Parser } from "antlr4ts/Parser";
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
-import { RecognitionException } from "antlr4ts/RecognitionException";
-import { RuleContext } from "antlr4ts/RuleContext";
-//import { RuleVersion } from "antlr4ts/RuleVersion";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { Token } from "antlr4ts/Token";
-import { TokenStream } from "antlr4ts/TokenStream";
-import { Vocabulary } from "antlr4ts/Vocabulary";
-import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
+import { ATN } from "antlr4ts/atn/ATN.js";
+import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer.js";
+import { FailedPredicateException } from "antlr4ts/FailedPredicateException.js";
+import { NotNull } from "antlr4ts/Decorators.js";
+import { NoViableAltException } from "antlr4ts/NoViableAltException.js";
+import { Override } from "antlr4ts/Decorators.js";
+import { Parser } from "antlr4ts/Parser.js";
+import { ParserRuleContext } from "antlr4ts/ParserRuleContext.js";
+import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator.js";
+import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener.js";
+import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor.js";
+import { RecognitionException } from "antlr4ts/RecognitionException.js";
+import { RuleContext } from "antlr4ts/RuleContext.js";
+//import { RuleVersion } from "antlr4ts/RuleVersion.js";
+import { TerminalNode } from "antlr4ts/tree/TerminalNode.js";
+import { Token } from "antlr4ts/Token.js";
+import { TokenStream } from "antlr4ts/TokenStream.js";
+import { Vocabulary } from "antlr4ts/Vocabulary.js";
+import { VocabularyImpl } from "antlr4ts/VocabularyImpl.js";
 
-import * as Utils from "antlr4ts/misc/Utils";
+import * as Utils from "antlr4ts/misc/Utils.js";
 
-import { ConciseTextListener } from "./ConciseTextListener";
-import { ConciseTextVisitor } from "./ConciseTextVisitor";
+import { ConciseTextListener } from "./ConciseTextListener.js";
+import { ConciseTextVisitor } from "./ConciseTextVisitor.js";
 
 
 export class ConciseTextParser extends Parser {
@@ -51,12 +51,12 @@ export class ConciseTextParser extends Parser {
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
-		undefined, "'/'", "'*'", undefined, undefined, undefined, undefined, undefined, 
+		undefined, "'/'", "'*'", undefined, undefined, undefined, undefined, undefined,
 		undefined, undefined, undefined, "'#'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
-		undefined, "SLASH", "ASTERISK", "COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END", 
-		"MULTILINE_COMMENT", "COMMENT", "NUMBER", "STRING", "WORD", "LABEL_START", 
+		undefined, "SLASH", "ASTERISK", "COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END",
+		"MULTILINE_COMMENT", "COMMENT", "NUMBER", "STRING", "WORD", "LABEL_START",
 		"WHITESPACE",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(ConciseTextParser._LITERAL_NAMES, ConciseTextParser._SYMBOLIC_NAMES, []);
@@ -93,48 +93,48 @@ export class ConciseTextParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 14;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << ConciseTextParser.NUMBER) | (1 << ConciseTextParser.STRING) | (1 << ConciseTextParser.WORD) | (1 << ConciseTextParser.WHITESPACE))) !== 0)) {
-				{
-				this.state = 12;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
-				case ConciseTextParser.NUMBER:
-					{
-					this.state = 8;
-					this.pushNumber();
-					}
-					break;
-				case ConciseTextParser.STRING:
-					{
-					this.state = 9;
-					this.pushString();
-					}
-					break;
-				case ConciseTextParser.WORD:
-					{
-					this.state = 10;
-					this.invokeFunction();
-					}
-					break;
-				case ConciseTextParser.WHITESPACE:
-					{
-					this.state = 11;
-					this.match(ConciseTextParser.WHITESPACE);
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				this.state = 16;
+				this.state = 14;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 17;
-			this.match(ConciseTextParser.EOF);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << ConciseTextParser.NUMBER) | (1 << ConciseTextParser.STRING) | (1 << ConciseTextParser.WORD) | (1 << ConciseTextParser.WHITESPACE))) !== 0)) {
+					{
+						this.state = 12;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+							case ConciseTextParser.NUMBER:
+								{
+									this.state = 8;
+									this.pushNumber();
+								}
+								break;
+							case ConciseTextParser.STRING:
+								{
+									this.state = 9;
+									this.pushString();
+								}
+								break;
+							case ConciseTextParser.WORD:
+								{
+									this.state = 10;
+									this.invokeFunction();
+								}
+								break;
+							case ConciseTextParser.WHITESPACE:
+								{
+									this.state = 11;
+									this.match(ConciseTextParser.WHITESPACE);
+								}
+								break;
+							default:
+								throw new NoViableAltException(this);
+						}
+					}
+					this.state = 16;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 17;
+				this.match(ConciseTextParser.EOF);
 			}
 		}
 		catch (re) {
@@ -158,22 +158,22 @@ export class ConciseTextParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 19;
-			_localctx._number = this.match(ConciseTextParser.NUMBER);
-			this.state = 23;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 2, this._ctx) ) {
-			case 1:
-				{
-				this.state = 20;
-				this.match(ConciseTextParser.WHITESPACE);
-				this.state = 21;
-				this.match(ConciseTextParser.LABEL_START);
-				this.state = 22;
-				_localctx._label = this.match(ConciseTextParser.WORD);
+				this.state = 19;
+				_localctx._number = this.match(ConciseTextParser.NUMBER);
+				this.state = 23;
+				this._errHandler.sync(this);
+				switch (this.interpreter.adaptivePredict(this._input, 2, this._ctx)) {
+					case 1:
+						{
+							this.state = 20;
+							this.match(ConciseTextParser.WHITESPACE);
+							this.state = 21;
+							this.match(ConciseTextParser.LABEL_START);
+							this.state = 22;
+							_localctx._label = this.match(ConciseTextParser.WORD);
+						}
+						break;
 				}
-				break;
-			}
 			}
 		}
 		catch (re) {
@@ -197,22 +197,22 @@ export class ConciseTextParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 25;
-			_localctx._string = this.match(ConciseTextParser.STRING);
-			this.state = 29;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 3, this._ctx) ) {
-			case 1:
-				{
-				this.state = 26;
-				this.match(ConciseTextParser.WHITESPACE);
-				this.state = 27;
-				this.match(ConciseTextParser.LABEL_START);
-				this.state = 28;
-				_localctx._label = this.match(ConciseTextParser.WORD);
+				this.state = 25;
+				_localctx._string = this.match(ConciseTextParser.STRING);
+				this.state = 29;
+				this._errHandler.sync(this);
+				switch (this.interpreter.adaptivePredict(this._input, 3, this._ctx)) {
+					case 1:
+						{
+							this.state = 26;
+							this.match(ConciseTextParser.WHITESPACE);
+							this.state = 27;
+							this.match(ConciseTextParser.LABEL_START);
+							this.state = 28;
+							_localctx._label = this.match(ConciseTextParser.WORD);
+						}
+						break;
 				}
-				break;
-			}
 			}
 		}
 		catch (re) {
@@ -236,22 +236,22 @@ export class ConciseTextParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 31;
-			_localctx._opcode = this.match(ConciseTextParser.WORD);
-			this.state = 35;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 4, this._ctx) ) {
-			case 1:
-				{
-				this.state = 32;
-				this.match(ConciseTextParser.WHITESPACE);
-				this.state = 33;
-				this.match(ConciseTextParser.LABEL_START);
-				this.state = 34;
-				_localctx._label = this.match(ConciseTextParser.WORD);
+				this.state = 31;
+				_localctx._opcode = this.match(ConciseTextParser.WORD);
+				this.state = 35;
+				this._errHandler.sync(this);
+				switch (this.interpreter.adaptivePredict(this._input, 4, this._ctx)) {
+					case 1:
+						{
+							this.state = 32;
+							this.match(ConciseTextParser.WHITESPACE);
+							this.state = 33;
+							this.match(ConciseTextParser.LABEL_START);
+							this.state = 34;
+							_localctx._label = this.match(ConciseTextParser.WORD);
+						}
+						break;
 				}
-				break;
-			}
 			}
 		}
 		catch (re) {

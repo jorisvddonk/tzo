@@ -2,18 +2,18 @@
 // Generated from src/grammars/ConciseText.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
-import { ATN } from "antlr4ts/atn/ATN";
-import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
-import { CharStream } from "antlr4ts/CharStream";
-import { Lexer } from "antlr4ts/Lexer";
-import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
-import { NotNull } from "antlr4ts/Decorators";
-import { Override } from "antlr4ts/Decorators";
-import { RuleContext } from "antlr4ts/RuleContext";
-import { Vocabulary } from "antlr4ts/Vocabulary";
-import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
+import { ATN } from "antlr4ts/atn/ATN.js";
+import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer.js";
+import { CharStream } from "antlr4ts/CharStream.js";
+import { Lexer } from "antlr4ts/Lexer.js";
+import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator.js";
+import { NotNull } from "antlr4ts/Decorators.js";
+import { Override } from "antlr4ts/Decorators.js";
+import { RuleContext } from "antlr4ts/RuleContext.js";
+import { Vocabulary } from "antlr4ts/Vocabulary.js";
+import { VocabularyImpl } from "antlr4ts/VocabularyImpl.js";
 
-import * as Utils from "antlr4ts/misc/Utils";
+import * as Utils from "antlr4ts/misc/Utils.js";
 
 
 export class ConciseTextLexer extends Lexer {
@@ -41,18 +41,18 @@ export class ConciseTextLexer extends Lexer {
 	];
 
 	public static readonly ruleNames: string[] = [
-		"BACKSLASH", "QUOTE", "ESCAPED_QUOTE", "ESCAPED_BACKSLASH", "SLASH", "ASTERISK", 
-		"COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END", "MULTILINE_COMMENT", 
+		"BACKSLASH", "QUOTE", "ESCAPED_QUOTE", "ESCAPED_BACKSLASH", "SLASH", "ASTERISK",
+		"COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END", "MULTILINE_COMMENT",
 		"COMMENT", "NUMBER", "STRING", "WORD", "LABEL_START", "WHITESPACE",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
-		undefined, "'/'", "'*'", undefined, undefined, undefined, undefined, undefined, 
+		undefined, "'/'", "'*'", undefined, undefined, undefined, undefined, undefined,
 		undefined, undefined, undefined, "'#'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
-		undefined, "SLASH", "ASTERISK", "COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END", 
-		"MULTILINE_COMMENT", "COMMENT", "NUMBER", "STRING", "WORD", "LABEL_START", 
+		undefined, "SLASH", "ASTERISK", "COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END",
+		"MULTILINE_COMMENT", "COMMENT", "NUMBER", "STRING", "WORD", "LABEL_START",
 		"WHITESPACE",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(ConciseTextLexer._LITERAL_NAMES, ConciseTextLexer._SYMBOLIC_NAMES, []);

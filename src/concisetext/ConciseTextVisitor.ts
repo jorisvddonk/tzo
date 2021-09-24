@@ -2,12 +2,12 @@
 // Generated from src/grammars/ConciseText.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
+import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor.js";
 
-import { InstructionsContext } from "./ConciseTextParser";
-import { PushNumberContext } from "./ConciseTextParser";
-import { PushStringContext } from "./ConciseTextParser";
-import { InvokeFunctionContext } from "./ConciseTextParser";
+import { InstructionsContext } from "./ConciseTextParser.js";
+import { PushNumberContext } from "./ConciseTextParser.js";
+import { PushStringContext } from "./ConciseTextParser.js";
+import { InvokeFunctionContext } from "./ConciseTextParser.js";
 
 
 /**
