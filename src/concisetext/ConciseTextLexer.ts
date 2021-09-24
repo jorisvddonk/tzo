@@ -1,0 +1,150 @@
+// @ts-nocheck
+// Generated from src/grammars/ConciseText.g4 by ANTLR 4.9.0-SNAPSHOT
+
+
+import { ATN } from "antlr4ts/atn/ATN";
+import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
+import { CharStream } from "antlr4ts/CharStream";
+import { Lexer } from "antlr4ts/Lexer";
+import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
+import { NotNull } from "antlr4ts/Decorators";
+import { Override } from "antlr4ts/Decorators";
+import { RuleContext } from "antlr4ts/RuleContext";
+import { Vocabulary } from "antlr4ts/Vocabulary";
+import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
+
+import * as Utils from "antlr4ts/misc/Utils";
+
+
+export class ConciseTextLexer extends Lexer {
+	public static readonly SLASH = 1;
+	public static readonly ASTERISK = 2;
+	public static readonly COMMENT_START = 3;
+	public static readonly ML_COMMENT_BEGIN = 4;
+	public static readonly ML_COMMENT_END = 5;
+	public static readonly MULTILINE_COMMENT = 6;
+	public static readonly COMMENT = 7;
+	public static readonly NUMBER = 8;
+	public static readonly STRING = 9;
+	public static readonly WORD = 10;
+	public static readonly LABEL_START = 11;
+	public static readonly WHITESPACE = 12;
+
+	// tslint:disable:no-trailing-whitespace
+	public static readonly channelNames: string[] = [
+		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
+	];
+
+	// tslint:disable:no-trailing-whitespace
+	public static readonly modeNames: string[] = [
+		"DEFAULT_MODE",
+	];
+
+	public static readonly ruleNames: string[] = [
+		"BACKSLASH", "QUOTE", "ESCAPED_QUOTE", "ESCAPED_BACKSLASH", "SLASH", "ASTERISK", 
+		"COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END", "MULTILINE_COMMENT", 
+		"COMMENT", "NUMBER", "STRING", "WORD", "LABEL_START", "WHITESPACE",
+	];
+
+	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
+		undefined, "'/'", "'*'", undefined, undefined, undefined, undefined, undefined, 
+		undefined, undefined, undefined, "'#'",
+	];
+	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
+		undefined, "SLASH", "ASTERISK", "COMMENT_START", "ML_COMMENT_BEGIN", "ML_COMMENT_END", 
+		"MULTILINE_COMMENT", "COMMENT", "NUMBER", "STRING", "WORD", "LABEL_START", 
+		"WHITESPACE",
+	];
+	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(ConciseTextLexer._LITERAL_NAMES, ConciseTextLexer._SYMBOLIC_NAMES, []);
+
+	// @Override
+	// @NotNull
+	public get vocabulary(): Vocabulary {
+		return ConciseTextLexer.VOCABULARY;
+	}
+	// tslint:enable:no-trailing-whitespace
+
+
+	constructor(input: CharStream) {
+		super(input);
+		this._interp = new LexerATNSimulator(ConciseTextLexer._ATN, this);
+	}
+
+	// @Override
+	public get grammarFileName(): string { return "ConciseText.g4"; }
+
+	// @Override
+	public get ruleNames(): string[] { return ConciseTextLexer.ruleNames; }
+
+	// @Override
+	public get serializedATN(): string { return ConciseTextLexer._serializedATN; }
+
+	// @Override
+	public get channelNames(): string[] { return ConciseTextLexer.channelNames; }
+
+	// @Override
+	public get modeNames(): string[] { return ConciseTextLexer.modeNames; }
+
+	public static readonly _serializedATN: string =
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x02\x0E|\b\x01\x04" +
+		"\x02\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04" +
+		"\x07\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r" +
+		"\x04\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x03\x02\x03\x02" +
+		"\x03\x03\x03\x03\x03\x04\x03\x04\x03\x04\x03\x05\x03\x05\x03\x05\x03\x06" +
+		"\x03\x06\x03\x07\x03\x07\x03\b\x03\b\x03\b\x03\t\x03\t\x03\t\x03\n\x03" +
+		"\n\x03\n\x03\v\x03\v\x07\v=\n\v\f\v\x0E\v@\v\v\x03\v\x03\v\x03\v\x03\v" +
+		"\x03\f\x03\f\x06\fH\n\f\r\f\x0E\fI\x03\f\x06\fM\n\f\r\f\x0E\fN\x03\f\x03" +
+		"\f\x03\r\x05\rT\n\r\x03\r\x06\rW\n\r\r\r\x0E\rX\x03\r\x05\r\\\n\r\x03" +
+		"\r\x07\r_\n\r\f\r\x0E\rb\v\r\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x07\x0Eh" +
+		"\n\x0E\f\x0E\x0E\x0Ek\v\x0E\x03\x0E\x03\x0E\x03\x0F\x03\x0F\x07\x0Fq\n" +
+		"\x0F\f\x0F\x0E\x0Ft\v\x0F\x03\x10\x03\x10\x03\x11\x06\x11y\n\x11\r\x11" +
+		"\x0E\x11z\x03>\x02\x02\x12\x03\x02\x02\x05\x02\x02\x07\x02\x02\t\x02\x02" +
+		"\v\x02\x03\r\x02\x04\x0F\x02\x05\x11\x02\x06\x13\x02\x07\x15\x02\b\x17" +
+		"\x02\t\x19\x02\n\x1B\x02\v\x1D\x02\f\x1F\x02\r!\x02\x0E\x03\x02\x07\x04" +
+		"\x02\f\f\x0F\x0F\x03\x022;\x03\x02$$\x06\x02\v\f\x0F\x0F\"\"%%\x05\x02" +
+		"\v\f\x0F\x0F\"\"\x02\x83\x02\v\x03\x02\x02\x02\x02\r\x03\x02\x02\x02\x02" +
+		"\x0F\x03\x02\x02\x02\x02\x11\x03\x02\x02\x02\x02\x13\x03\x02\x02\x02\x02" +
+		"\x15\x03\x02\x02\x02\x02\x17\x03\x02\x02\x02\x02\x19\x03\x02\x02\x02\x02" +
+		"\x1B\x03\x02\x02\x02\x02\x1D\x03\x02\x02\x02\x02\x1F\x03\x02\x02\x02\x02" +
+		"!\x03\x02\x02\x02\x03#\x03\x02\x02\x02\x05%\x03\x02\x02\x02\x07\'\x03" +
+		"\x02\x02\x02\t*\x03\x02\x02\x02\v-\x03\x02\x02\x02\r/\x03\x02\x02\x02" +
+		"\x0F1\x03\x02\x02\x02\x114\x03\x02\x02\x02\x137\x03\x02\x02\x02\x15:\x03" +
+		"\x02\x02\x02\x17E\x03\x02\x02\x02\x19S\x03\x02\x02\x02\x1Bc\x03\x02\x02" +
+		"\x02\x1Dn\x03\x02\x02\x02\x1Fu\x03\x02\x02\x02!x\x03\x02\x02\x02#$\x07" +
+		"^\x02\x02$\x04\x03\x02\x02\x02%&\x07$\x02\x02&\x06\x03\x02\x02\x02\'(" +
+		"\x05\x03\x02\x02()\x05\x05\x03\x02)\b\x03\x02\x02\x02*+\x05\x03\x02\x02" +
+		"+,\x05\x03\x02\x02,\n\x03\x02\x02\x02-.\x071\x02\x02.\f\x03\x02\x02\x02" +
+		"/0\x07,\x02\x020\x0E\x03\x02\x02\x0212\x05\v\x06\x0223\x05\v\x06\x023" +
+		"\x10\x03\x02\x02\x0245\x05\v\x06\x0256\x05\r\x07\x026\x12\x03\x02\x02" +
+		"\x0278\x05\r\x07\x0289\x05\v\x06\x029\x14\x03\x02\x02\x02:>\x05\x11\t" +
+		"\x02;=\v\x02\x02\x02<;\x03\x02\x02\x02=@\x03\x02\x02\x02>?\x03\x02\x02" +
+		"\x02><\x03\x02\x02\x02?A\x03\x02\x02\x02@>\x03\x02\x02\x02AB\x05\x13\n" +
+		"\x02BC\x03\x02\x02\x02CD\b\v\x02\x02D\x16\x03\x02\x02\x02EG\x05\x0F\b" +
+		"\x02FH\n\x02\x02\x02GF\x03\x02\x02\x02HI\x03\x02\x02\x02IG\x03\x02\x02" +
+		"\x02IJ\x03\x02\x02\x02JL\x03\x02\x02\x02KM\x05!\x11\x02LK\x03\x02\x02" +
+		"\x02MN\x03\x02\x02\x02NL\x03\x02\x02\x02NO\x03\x02\x02\x02OP\x03\x02\x02" +
+		"\x02PQ\b\f\x02\x02Q\x18\x03\x02\x02\x02RT\x07/\x02\x02SR\x03\x02\x02\x02" +
+		"ST\x03\x02\x02\x02TV\x03\x02\x02\x02UW\t\x03\x02\x02VU\x03\x02\x02\x02" +
+		"WX\x03\x02\x02\x02XV\x03\x02\x02\x02XY\x03\x02\x02\x02Y[\x03\x02\x02\x02" +
+		"Z\\\x070\x02\x02[Z\x03\x02\x02\x02[\\\x03\x02\x02\x02\\`\x03\x02\x02\x02" +
+		"]_\t\x03\x02\x02^]\x03\x02\x02\x02_b\x03\x02\x02\x02`^\x03\x02\x02\x02" +
+		"`a\x03\x02\x02\x02a\x1A\x03\x02\x02\x02b`\x03\x02\x02\x02ci\x05\x05\x03" +
+		"\x02dh\x05\x07\x04\x02eh\x05\t\x05\x02fh\n\x04\x02\x02gd\x03\x02\x02\x02" +
+		"ge\x03\x02\x02\x02gf\x03\x02\x02\x02hk\x03\x02\x02\x02ig\x03\x02\x02\x02" +
+		"ij\x03\x02\x02\x02jl\x03\x02\x02\x02ki\x03\x02\x02\x02lm\x05\x05\x03\x02" +
+		"m\x1C\x03\x02\x02\x02nr\n\x05\x02\x02oq\n\x06\x02\x02po\x03\x02\x02\x02" +
+		"qt\x03\x02\x02\x02rp\x03\x02\x02\x02rs\x03\x02\x02\x02s\x1E\x03\x02\x02" +
+		"\x02tr\x03\x02\x02\x02uv\x07%\x02\x02v \x03\x02\x02\x02wy\t\x06\x02\x02" +
+		"xw\x03\x02\x02\x02yz\x03\x02\x02\x02zx\x03\x02\x02\x02z{\x03\x02\x02\x02" +
+		"{\"\x03\x02\x02\x02\x0E\x02>INSX[`girz\x03\b\x02\x02";
+	public static __ATN: ATN;
+	public static get _ATN(): ATN {
+		if (!ConciseTextLexer.__ATN) {
+			ConciseTextLexer.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(ConciseTextLexer._serializedATN));
+		}
+
+		return ConciseTextLexer.__ATN;
+	}
+
+}
+

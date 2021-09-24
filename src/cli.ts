@@ -25,7 +25,7 @@ if (program.I && program.I.endsWith(".json")) {
 if (program.I && (program.I.endsWith(".txt") || program.I.endsWith(".tzoct"))) {
   const input_file = fs.readFileSync(program.I).toString();
   const tokenizer = new Tokenizer();
-  vmState.programList = tokenizer.transform(tokenizer.tokenize(input_file));
+  vmState.programList = tokenizer.parse(input_file);
 }
 
 const vm = new VM({});

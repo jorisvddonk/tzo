@@ -1,6 +1,11 @@
 import u from "unist-builder";
 import { Instruction } from "../interfaces.js";
 import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../index.js";
+import { ANTLRInputStream, CommonTokenStream } from "antlr4ts";
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker'
+import { ConciseTextLexer } from "../concisetext/ConciseTextLexer.js";
+import { ConciseTextParser, InstructionsContext, InvokeFunctionContext, PushNumberContext, PushStringContext } from "../concisetext/ConciseTextParser.js";
+import { ConciseTextListener } from "../concisetext/ConciseTextListener.js";
 
 const stringPushOperationRegexp = /^\"(.+)\"$/;
 const numberPushOperationRegexp = /^(-?[0-9]+)$/;
@@ -19,6 +24,75 @@ export const invokeFunction: (name: string, comment?: string) => InvokeFunctionI
 
 export class Tokenizer {
 
+  parse(codeBlock: string) {
+    function getTree(input: string) {
+      let inputStream = new ANTLRInputStream(input);
+      let lexer = new ConciseTextLexer(inputStream);
+      let tokenStream = new CommonTokenStream(lexer);
+      let parser = new ConciseTextParser(tokenStream);
+      return parser.instructions();
+    }
+
+    class Listener implements ConciseTextListener {
+      public instructions: Instruction[] = [];
+      private lastInstruction: Instruction = null;
+
+      enterInstructions(context: InstructionsContext) {
+        this.lastInstruction = {
+          functionName: null,
+          type: null,
+          value: null,
+          comment: null,
+          label: null
+        }
+      }
+
+      enterPushNumber(context: PushNumberContext) {
+        this.lastInstruction = pushNumber(parseInt(context._number.text));
+        this.lastInstruction.label = context._label !== undefined ? context._label.text : undefined
+      }
+
+      enterPushString(context: PushStringContext) {
+        const str = context._string.text;
+        this.lastInstruction = pushString(str.substr(1, str.length - 2));
+        this.lastInstruction.label = context._label !== undefined ? context._label.text : undefined
+      }
+
+      enterInvokeFunction(context: InvokeFunctionContext) {
+        this.lastInstruction = invokeFunction(context._opcode.text);
+        this.lastInstruction.label = context._label !== undefined ? context._label.text : undefined
+      }
+
+      exitPushNumber() {
+        this.instructions.push(this.lastInstruction);
+        this.lastInstruction = null;
+      }
+
+      exitPushString() {
+        this.instructions.push(this.lastInstruction);
+        this.lastInstruction = null;
+      }
+
+      exitInvokeFunction() {
+        this.instructions.push(this.lastInstruction);
+        this.lastInstruction = null;
+      }
+
+      getInstructions() {
+        return this.instructions;
+      }
+    }
+
+    const listener = new Listener();
+    ParseTreeWalker.DEFAULT.walk(listener as ConciseTextListener, getTree(codeBlock));
+    return listener.getInstructions();
+  }
+
+  /**
+   * @deprecated - use `parse()` instead
+   * @param codeBlock 
+   * @returns 
+   */
   tokenize(codeBlock: string) {
     let parsing: "string" | null = null;
     let partial_parse = "";
@@ -73,6 +147,11 @@ export class Tokenizer {
     return tokens;
   }
 
+  /**
+   * @deprecated - use `parse()` instead
+   * @param codeBlock 
+   * @returns 
+   */
   transform(tokens: string[]) {
     /**
      * Parse a list of tokens into a list of Instructions
