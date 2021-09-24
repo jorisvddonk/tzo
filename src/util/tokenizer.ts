@@ -2,7 +2,7 @@ import u from "unist-builder";
 import { Instruction } from "../interfaces.js";
 import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../index.js";
 import { ANTLRInputStream, CommonTokenStream } from "antlr4ts";
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker'
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker.js'
 import { ConciseTextLexer } from "../concisetext/ConciseTextLexer.js";
 import { ConciseTextParser, InstructionsContext, InvokeFunctionContext, PushNumberContext, PushStringContext } from "../concisetext/ConciseTextParser.js";
 import { ConciseTextListener } from "../concisetext/ConciseTextListener.js";
