@@ -3,3 +3,4 @@ src/
 *.log
 examples/
 reference/
+.antlr/

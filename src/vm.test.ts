@@ -1,5 +1,7 @@
-import { Context, Instruction, Tokenizer, VM } from ".";
-import { LabelMap, Stack } from "./interfaces.js";
+import { VM } from "./vm";
+import { Context, Instruction } from "./interfaces";
+import { Tokenizer } from "./util/tokenizer";
+import { LabelMap, Stack } from "./interfaces";
 import { mockProcessStdout } from "jest-mock-process";
 import fs from "fs";
 
@@ -35,7 +37,7 @@ function createVM(codeBlock: string, initialContext?: Context, initialLabelMap?:
   }
   const vm = new VM(initialContext !== undefined ? initialContext : {});
   const tokenizer = new Tokenizer();
-  const instructions = tokenizer.transform(tokenizer.tokenize(codeBlock));
+  const instructions = tokenizer.parse(codeBlock);
   vm.loadProgramList(instructions, initialLabelMap);
   return { vm, instructions };
 }
@@ -55,7 +57,7 @@ function expectVM(codeBlock: string, initialContext: Context, expectations: Expe
     lastTest += 1;
   }
   if (EMIT_TEST_JSONS) {
-    fs.writeFileSync(`./src/tests/${usedTestName}.json`, JSON.stringify({
+    fs.writeFileSync(`./src/tests/${usedTestName}on`, JSON.stringify({
       input_program: instructions,
       initial_context: initialContext,
       expected: {
