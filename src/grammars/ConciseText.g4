@@ -13,7 +13,9 @@ pushNumber:
 pushString:
 	string = STRING (WHITESPACE LABEL_START label = WORD)?;
 invokeFunction:
-	opcode = WORD (WHITESPACE LABEL_START label = WORD)?;
+	opcode = (WORD | ASTERISK) (
+		WHITESPACE LABEL_START label = WORD
+	)?;
 
 fragment BACKSLASH: '\\';
 fragment QUOTE: '"';
