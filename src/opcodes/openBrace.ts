@@ -1,7 +1,7 @@
 import { Stack, Context, FunctionInvocationOperation } from "../interfaces";
 import { VM } from "../vm";
 
-const openBrace: FunctionInvocationOperation = (stack: Stack, context: Context, vm: VM) => { // jump to matching brace (source)
+const openBrace: FunctionInvocationOperation = function openBrace(stack: Stack, context: Context, vm: VM) { // jump to matching brace (source)
   let i = 0;
   let pc = vm.programCounter + 1;
   while (true) {
