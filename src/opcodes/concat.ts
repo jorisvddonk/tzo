@@ -1,5 +1,5 @@
-import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
-import { getStackParams } from "../getStackParams.js";
+import { Stack, Context, FunctionInvocationOperation } from "../interfaces";
+import { getStackParams } from "../getStackParams";
 
 const concat: FunctionInvocationOperation = (stack: Stack) => {
   const [val1, val2] = getStackParams("concat", ["string | number", "string | number"], stack) as [string | number, string | number];

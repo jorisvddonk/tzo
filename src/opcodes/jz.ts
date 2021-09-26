@@ -1,6 +1,6 @@
-import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
-import { VM } from "../vm.js";
-import { getStackParams } from "../getStackParams.js";
+import { Stack, Context, FunctionInvocationOperation } from "../interfaces";
+import { VM } from "../vm";
+import { getStackParams } from "../getStackParams";
 
 const jz: FunctionInvocationOperation = (stack: Stack, context: Context, vm: VM) => { // jump (skip next instruction) if stack.pop() is than zero
   const [num1] = getStackParams("jz", ["number"], stack) as [number];

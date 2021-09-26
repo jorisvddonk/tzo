@@ -1,6 +1,5 @@
-import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
-import { VM } from "../vm.js";
-import { getStackParams } from "../getStackParams.js";
+import { Stack, FunctionInvocationOperation } from "../interfaces";
+import { getStackParams } from "../getStackParams";
 
 const randInt: FunctionInvocationOperation = (stack: Stack) => {
   const [max] = getStackParams("randInt", ["number"], stack) as [number];

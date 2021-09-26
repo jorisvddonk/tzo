@@ -1,6 +1,5 @@
-import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
-import { VM } from "../vm.js";
-import { getStackParams } from "../getStackParams.js";
+import { Stack, Context, FunctionInvocationOperation } from "../interfaces";
+import { getStackParams } from "../getStackParams";
 
 const gt: FunctionInvocationOperation = (stack: Stack, context: Context) => {
   const [num1, num2] = getStackParams("gt", ["number", "number"], stack) as [number, number];

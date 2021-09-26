@@ -1,6 +1,4 @@
-import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
-import { VM } from "../vm.js";
-import { getStackParams } from "../getStackParams.js";
+import { FunctionInvocationOperation } from "../interfaces";
 /**
  * nop opcode: do nothing.
  */

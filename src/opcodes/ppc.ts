@@ -1,6 +1,5 @@
-import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
-import { VM } from "../vm.js";
-import { getStackParams } from "../getStackParams.js";
+import { Stack, Context, FunctionInvocationOperation } from "../interfaces";
+import { VM } from "../vm";
 
 /**
  * ppc opcode: push the current program counter (pointing to the location of this `ppc` instruction in the program memory) to the stack.

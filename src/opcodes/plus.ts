@@ -1,6 +1,5 @@
-import { Stack, Context, FunctionInvocationOperation } from "../interfaces.js";
-import { VM } from "../vm.js";
-import { getStackParams } from "../getStackParams.js";
+import { Stack, FunctionInvocationOperation } from "../interfaces";
+import { getStackParams } from "../getStackParams";
 
 // also known as '+'
 const plus: FunctionInvocationOperation = (stack: Stack) => {

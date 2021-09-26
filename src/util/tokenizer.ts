@@ -1,11 +1,10 @@
 import u from "unist-builder";
-import { Instruction } from "../interfaces.js";
-import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../index.js";
-import { ANTLRInputStream, CommonTokenStream } from "antlr4ts";
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker.js'
-import { ConciseTextLexer } from "../concisetext/ConciseTextLexer.js";
-import { ConciseTextParser, InstructionsContext, InvokeFunctionContext, PushNumberContext, PushStringContext } from "../concisetext/ConciseTextParser.js";
-import { ConciseTextListener } from "../concisetext/ConciseTextListener.js";
+import { Instruction } from "../interfaces";
+import { InvokeFunctionInstruction, LabelMap, PushNumberInstruction, PushStringInstruction } from "../index";
+import { ConciseTextLexer } from "../concisetext/ConciseTextLexer";
+import { ConciseTextParser } from "../concisetext/ConciseTextParser";
+import { ConciseTextListener } from "../concisetext/ConciseTextListener";
+import antlr4 from 'antlr4';
 
 const stringPushOperationRegexp = /^\"(.+)\"$/;
 const numberPushOperationRegexp = /^(-?[0-9]+)$/;
@@ -26,18 +25,18 @@ export class Tokenizer {
 
   parse(codeBlock: string) {
     function getTree(input: string) {
-      let inputStream = new ANTLRInputStream(input);
+      let inputStream = new antlr4.InputStream(input);
       let lexer = new ConciseTextLexer(inputStream);
-      let tokenStream = new CommonTokenStream(lexer);
+      let tokenStream = new antlr4.CommonTokenStream(lexer);
       let parser = new ConciseTextParser(tokenStream);
       return parser.instructions();
     }
 
-    class Listener implements ConciseTextListener {
+    class Listener extends ConciseTextListener {
       public instructions: Instruction[] = [];
       private lastInstruction: Instruction = null;
 
-      enterInstructions(context: InstructionsContext) {
+      enterInstructions(context) {
         this.lastInstruction = {
           functionName: null,
           type: null,
@@ -47,20 +46,20 @@ export class Tokenizer {
         }
       }
 
-      enterPushNumber(context: PushNumberContext) {
-        this.lastInstruction = pushNumber(parseInt(context._number.text));
-        this.lastInstruction.label = context._label !== undefined ? context._label.text : undefined
+      enterPushNumber(context) {
+        this.lastInstruction = pushNumber(parseInt(context.number.text));
+        this.lastInstruction.label = context.label ? context.label.text : undefined
       }
 
-      enterPushString(context: PushStringContext) {
-        const str = context._string.text;
+      enterPushString(context) {
+        const str = context.string.text;
         this.lastInstruction = pushString(str.substr(1, str.length - 2));
-        this.lastInstruction.label = context._label !== undefined ? context._label.text : undefined
+        this.lastInstruction.label = context.label ? context.label.text : undefined
       }
 
-      enterInvokeFunction(context: InvokeFunctionContext) {
-        this.lastInstruction = invokeFunction(context._opcode.text);
-        this.lastInstruction.label = context._label !== undefined ? context._label.text : undefined
+      enterInvokeFunction(context) {
+        this.lastInstruction = invokeFunction(context.opcode.text);
+        this.lastInstruction.label = context.label ? context.label.text : undefined
       }
 
       exitPushNumber() {
@@ -84,7 +83,7 @@ export class Tokenizer {
     }
 
     const listener = new Listener();
-    ParseTreeWalker.DEFAULT.walk(listener as ConciseTextListener, getTree(codeBlock));
+    antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, getTree(codeBlock));
     return listener.getInstructions();
   }
 

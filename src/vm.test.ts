@@ -57,7 +57,7 @@ function expectVM(codeBlock: string, initialContext: Context, expectations: Expe
     lastTest += 1;
   }
   if (EMIT_TEST_JSONS) {
-    fs.writeFileSync(`./src/tests/${usedTestName}on`, JSON.stringify({
+    fs.writeFileSync(`./src/tests/${usedTestName}.json`, JSON.stringify({
       input_program: instructions,
       initial_context: initialContext,
       expected: {
