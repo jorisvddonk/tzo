@@ -5,7 +5,7 @@ import { Tokenizer } from "./util/tokenizer";
 import { TzoVMState } from "./interfaces";
 
 program
-  .version('1.0.8')
+  .version('1.0.18')
   .requiredOption('--input, -i <path>', "Path to Tzo VMState .json or Tzo ConciseText .txt/.tzoct file")
   .parse(process.argv);
 
