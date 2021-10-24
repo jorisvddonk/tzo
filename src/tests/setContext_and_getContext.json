@@ -1,0 +1,55 @@
+{
+  "input_program": [
+    {
+      "type": "push-number-instruction",
+      "value": 1
+    },
+    {
+      "type": "push-string-instruction",
+      "value": "bar"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "setContext"
+    },
+    {
+      "type": "push-string-instruction",
+      "value": "foo"
+    },
+    {
+      "type": "push-string-instruction",
+      "value": "baz"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "setContext"
+    },
+    {
+      "type": "push-string-instruction",
+      "value": "bar"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "getContext"
+    },
+    {
+      "type": "push-string-instruction",
+      "value": "baz"
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "getContext"
+    }
+  ],
+  "initial_context": {},
+  "expected": {
+    "context": {
+      "bar": 1,
+      "baz": "foo"
+    },
+    "stack": [
+      1,
+      "foo"
+    ]
+  }
+}
