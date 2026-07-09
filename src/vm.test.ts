@@ -134,6 +134,15 @@ test('should throw an error when trying to get context for unknown variables', (
   expect(() => createVMAndRunCode(`"asdfzxc" getContext`, ctx)).toThrow();
 });
 
+test('should throw an error when using a non-string key for context operations', () => {
+  const ctx = { "ham": "ster", "one": 1, "two": 2 };
+  // the key is the top of the stack, so a numeric key means the number is last pushed
+  expect(() => createVMAndRunCode(`"value" 5 setContext`, ctx)).toThrow();
+  expect(() => createVMAndRunCode(`5 getContext`, ctx)).toThrow();
+  expect(() => createVMAndRunCode(`5 hasContext`, ctx)).toThrow();
+  expect(() => createVMAndRunCode(`5 delContext`, ctx)).toThrow();
+});
+
 test('should add numbers', () => {
   expectStack(`1 2 +`, [3], "plus_0");
   expectStack(`1 2 plus`, [3], "plus_1");
