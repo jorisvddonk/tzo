@@ -1,0 +1,18 @@
+{
+  "input_program": [
+    {
+      "type": "push-number-instruction",
+      "value": 256
+    },
+    {
+      "type": "invoke-function-instruction",
+      "functionName": "charCode"
+    }
+  ],
+  "initial_context": {},
+  "expected": {
+    "stack": [
+      "Ā"
+    ]
+  }
+}

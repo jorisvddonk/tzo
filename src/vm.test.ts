@@ -143,6 +143,22 @@ test('should throw an error when using a non-string key for context operations',
   expect(() => createVMAndRunCode(`5 delContext`, ctx)).toThrow();
 });
 
+test('should throw an error when adding/subtracting/multiplying non-numbers', () => {
+  expect(() => createVMAndRunCode(`"foo" 1 +`, {})).toThrow();
+  expect(() => createVMAndRunCode(`1 "foo" +`, {})).toThrow();
+  expect(() => createVMAndRunCode(`"foo" 1 -`, {})).toThrow();
+  expect(() => createVMAndRunCode(`"foo" 1 *`, {})).toThrow();
+});
+
+test('randInt with max 0 should push 0 without throwing', () => {
+  expectStack(`0 randInt`, [0], "randint_zero");
+});
+
+test('charCode should map full code points like String.fromCharCode', () => {
+  expectStack(`97 charCode`, ["a"], "charcode_ascii");
+  expectStack(`256 charCode`, ["Ā"], "charcode_codepoint");
+});
+
 test('should add numbers', () => {
   expectStack(`1 2 +`, [3], "plus_0");
   expectStack(`1 2 plus`, [3], "plus_1");
