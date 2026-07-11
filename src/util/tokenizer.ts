@@ -7,7 +7,7 @@ import { ConciseTextListener } from "../concisetext/ConciseTextListener";
 import antlr4 from 'antlr4';
 
 const stringPushOperationRegexp = /^\"(.+)\"$/;
-const numberPushOperationRegexp = /^(-?[0-9]+)$/;
+const numberPushOperationRegexp = /^(-?[0-9]+(\.[0-9]+)?)$/;
 const functionInvocationOperationRegexp = /^(\S+)$/;
 const labelInstructionRegexp = /^\#(\S+)$/;
 
@@ -47,7 +47,7 @@ export class Tokenizer {
       }
 
       enterPushNumber(context) {
-        this.lastInstruction = pushNumber(parseInt(context.number.text));
+        this.lastInstruction = pushNumber(parseFloat(context.number.text));
         this.lastInstruction.label = context.label ? context.label.text : undefined
       }
 
@@ -175,7 +175,7 @@ export class Tokenizer {
 
       const matchNumberPushOp = token.match(numberPushOperationRegexp);
       if (matchNumberPushOp !== null) {
-        const numberToPush = parseInt(matchNumberPushOp[1]);
+        const numberToPush = parseFloat(matchNumberPushOp[1]);
         return pushNumber(numberToPush);
       }
 

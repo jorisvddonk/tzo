@@ -160,27 +160,16 @@ test('charCode should map full code points like String.fromCharCode', () => {
 });
 
 test('comparison and jump ops should use float semantics, not integer truncation', () => {
-  // NOTE: concise syntax only supports integers (parseInt), so floats are expressed via Standard Representation
-  expect(createVMAndRunStdRepCode([
-    { type: "push-number-instruction", value: 0.1 },
-    { type: "push-number-instruction", value: 0.9 },
-    { type: "invoke-function-instruction", functionName: "gt" },
-  ]).stack).toEqual([1]);
-  expect(createVMAndRunStdRepCode([
-    { type: "push-number-instruction", value: 0.9 },
-    { type: "push-number-instruction", value: 0.1 },
-    { type: "invoke-function-instruction", functionName: "lt" },
-  ]).stack).toEqual([1]);
-  expect(createVMAndRunStdRepCode([
-    { type: "push-number-instruction", value: 0.5 },
-    { type: "invoke-function-instruction", functionName: "jgz" },
-    { type: "push-number-instruction", value: 99 },
-  ]).stack).toEqual([]);
-  expect(createVMAndRunStdRepCode([
-    { type: "push-number-instruction", value: 0.5 },
-    { type: "invoke-function-instruction", functionName: "jz" },
-    { type: "push-number-instruction", value: 99 },
-  ]).stack).toEqual([99]);
+  // concise syntax now parses floats too, so these use decimal literals directly
+  expectStack(`0.1 0.9 gt`, [1], "gt_fractional");
+  expectStack(`0.9 0.1 lt`, [1], "lt_fractional");
+  expectStack(`0.5 jgz 99`, [], "jgz_fractional_skip");
+  expectStack(`0.5 jz 99`, [99], "jz_fractional_no_skip");
+});
+
+test('concise syntax should parse decimal number literals', () => {
+  expectStack(`1.5 2.5 +`, [4], "decimal_parse_add");
+  expectStack(`0.5 0.5 +`, [1], "decimal_parse_add2");
 });
 
 test('should add numbers', () => {
