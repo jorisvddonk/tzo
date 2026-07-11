@@ -159,6 +159,30 @@ test('charCode should map full code points like String.fromCharCode', () => {
   expectStack(`256 charCode`, ["Ā"], "charcode_codepoint");
 });
 
+test('comparison and jump ops should use float semantics, not integer truncation', () => {
+  // NOTE: concise syntax only supports integers (parseInt), so floats are expressed via Standard Representation
+  expect(createVMAndRunStdRepCode([
+    { type: "push-number-instruction", value: 0.1 },
+    { type: "push-number-instruction", value: 0.9 },
+    { type: "invoke-function-instruction", functionName: "gt" },
+  ]).stack).toEqual([1]);
+  expect(createVMAndRunStdRepCode([
+    { type: "push-number-instruction", value: 0.9 },
+    { type: "push-number-instruction", value: 0.1 },
+    { type: "invoke-function-instruction", functionName: "lt" },
+  ]).stack).toEqual([1]);
+  expect(createVMAndRunStdRepCode([
+    { type: "push-number-instruction", value: 0.5 },
+    { type: "invoke-function-instruction", functionName: "jgz" },
+    { type: "push-number-instruction", value: 99 },
+  ]).stack).toEqual([]);
+  expect(createVMAndRunStdRepCode([
+    { type: "push-number-instruction", value: 0.5 },
+    { type: "invoke-function-instruction", functionName: "jz" },
+    { type: "push-number-instruction", value: 99 },
+  ]).stack).toEqual([99]);
+});
+
 test('should add numbers', () => {
   expectStack(`1 2 +`, [3], "plus_0");
   expectStack(`1 2 plus`, [3], "plus_1");
@@ -426,5 +450,17 @@ test('stdout', () => {
   expect(stdOut).toHaveBeenCalledWith('1');
   expectStack(`"hello" stdout`, [], "stdout_1");
   expect(stdOut).toHaveBeenCalledWith('hello');
+  stdOut.mockRestore();
+});
+
+test('stdout should coerce values like JavaScript (negative zero and empty stack)', () => {
+  const stdOut = mockProcessStdout();
+  // -1 0 * evaluates to -0, and "" + -0 === "0" in JavaScript
+  createVMAndRunCode(`-1 0 * stdout`);
+  expect(stdOut).toHaveBeenCalledWith('0');
+  stdOut.mockClear();
+  // popping from an empty stack yields undefined, and "" + undefined === "undefined"
+  createVMAndRunCode(`stdout`);
+  expect(stdOut).toHaveBeenCalledWith('undefined');
   stdOut.mockRestore();
 });
