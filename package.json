@@ -1,6 +1,6 @@
 {
   "name": "tzo",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "A simple Stack-based Virtual Machine",
   "main": "dist/node/index.js",
   "types": "dist/node/index.d.ts",
